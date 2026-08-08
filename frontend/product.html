@@ -1,0 +1,341 @@
+<!-- ============================================================
+   R BD SHOP — Product Detail Page
+   Path: frontend/product.html
+   Description: Single product page with gallery, info, tabs,
+                order CTAs, reviews, related products.
+   ============================================================ -->
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Dynamic SEO (JS will update these) -->
+  <title>পণ্য লোড হচ্ছে... | R BD SHOP</title>
+  <meta name="description" content="R BD SHOP — সেরা মানের পণ্য, সাশ্রয়ী মূল্যে।" />
+  <link rel="canonical" href="" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="product" />
+  <meta property="og:site_name" content="R BD SHOP" />
+  <meta property="og:title" content="R BD SHOP" />
+  <meta property="og:description" content="" />
+  <meta property="og:image" content="" />
+  <meta property="og:url" content="" />
+  <meta property="product:price:amount" content="" />
+  <meta property="product:price:currency" content="BDT" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="R BD SHOP" />
+  <meta name="twitter:description" content="" />
+  <meta name="twitter:image" content="" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+
+  <!-- FOUC Prevention -->
+  <script>
+    (function(){
+      try{
+        var s=localStorage.getItem('rbd-theme');
+        if(s==='dark'){document.documentElement.setAttribute('data-theme','dark')}
+        else if(!s){
+          if(window.matchMedia('(prefers-color-scheme:dark)').matches)
+            document.documentElement.setAttribute('data-theme','dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/header.css" />
+  <link rel="stylesheet" href="css/product.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+
+  <!-- JSON-LD (JS will inject dynamically) -->
+  <script id="product-jsonld" type="application/ld+json">{}</script>
+</head>
+
+<body>
+
+  <!-- Page Loader -->
+  <div id="page-loader" aria-hidden="true">
+    <div class="loader-logo">
+      <span class="loader-logo__text">R BD SHOP</span>
+      <div class="loader-spinner"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div id="header-root"></div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PRODUCT DETAIL SECTION
+  ═══════════════════════════════════════════════════════ -->
+  <main class="product-detail">
+    <div class="container">
+
+      <!-- Breadcrumb -->
+      <nav class="product-breadcrumb" id="product-breadcrumb" aria-label="পথ নির্দেশিকা">
+        <a href="index.html">হোম</a>
+        <span class="product-breadcrumb__sep">›</span>
+        <a href="search.html">পণ্যসমূহ</a>
+        <span class="product-breadcrumb__sep">›</span>
+        <span id="breadcrumb-category">—</span>
+        <span class="product-breadcrumb__sep">›</span>
+        <span id="breadcrumb-product" style="color:var(--txt-primary);font-weight:600">—</span>
+      </nav>
+
+      <!-- Main Layout -->
+      <div class="product-detail__layout" id="product-layout">
+
+        <!-- LEFT: Gallery -->
+        <div class="product-detail__gallery" id="product-gallery">
+          <!-- Main Image -->
+          <div class="gallery__main" id="gallery-main">
+            <div class="gallery__badges" id="gallery-badges"></div>
+            <img
+              class="gallery__main-img"
+              id="gallery-main-img"
+              src=""
+              alt="পণ্যের ছবি"
+            />
+          </div>
+          <!-- Thumbnails -->
+          <div class="gallery__thumbs" id="gallery-thumbs"></div>
+        </div>
+
+        <!-- RIGHT: Product Info -->
+        <div class="product-detail__info" id="product-info">
+
+          <!-- Loading skeleton -->
+          <div id="product-info-skeleton">
+            <div class="skeleton" style="height:16px;width:100px;margin-bottom:12px;border-radius:20px"></div>
+            <div class="skeleton" style="height:36px;width:80%;margin-bottom:10px"></div>
+            <div class="skeleton" style="height:14px;width:60%;margin-bottom:20px"></div>
+            <div class="skeleton" style="height:50px;width:70%;margin-bottom:16px;border-radius:12px"></div>
+            <div class="skeleton" style="height:14px;width:50%;margin-bottom:20px"></div>
+            <div class="skeleton" style="height:60px;width:100%;margin-bottom:12px;border-radius:12px"></div>
+            <div class="skeleton" style="height:48px;width:100%;margin-bottom:8px;border-radius:12px"></div>
+            <div class="skeleton" style="height:48px;width:100%;border-radius:12px"></div>
+          </div>
+
+          <!-- Actual content (hidden until loaded) -->
+          <div id="product-info-content" class="hidden">
+
+            <!-- Product Code -->
+            <span class="product-code" id="product-code" data-tooltip="ক্লিক করে কপি করুন">
+              📋 <span id="product-code-text">—</span>
+            </span>
+
+            <!-- Title -->
+            <h1 class="product-detail__title" id="product-title">—</h1>
+
+            <!-- Meta (Category + Brand) -->
+            <div class="product-detail__meta" id="product-meta">
+              <a href="#" class="product-detail__category-link" id="product-category-link">—</a>
+              <span class="product-detail__brand" id="product-brand"></span>
+            </div>
+
+            <!-- Rating -->
+            <div class="product-detail__rating" id="product-rating" style="display:none">
+              <span id="product-stars"></span>
+              <span class="product-detail__review-count" id="product-review-count"></span>
+            </div>
+
+            <!-- Price Section -->
+            <div class="product-detail__price-section" id="product-price-section">
+              <div class="product-detail__price-row">
+                <span class="product-detail__current-price" id="product-price">—</span>
+                <span class="product-detail__old-price hidden" id="product-old-price"></span>
+                <span class="product-detail__discount-badge hidden" id="product-discount-badge"></span>
+              </div>
+              <p class="product-detail__savings hidden" id="product-savings"></p>
+            </div>
+
+            <!-- Stock Status -->
+            <div class="product-detail__stock" id="product-stock"></div>
+
+            <!-- Short Description -->
+            <p class="product-detail__short-desc" id="product-short-desc"></p>
+
+            <!-- Quantity Selector -->
+            <div class="quantity-selector" id="quantity-selector">
+              <span class="quantity-selector__label">পরিমাণ:</span>
+              <div class="quantity-selector__control">
+                <button class="quantity-selector__btn" id="qty-minus" aria-label="কমান">−</button>
+                <span class="quantity-selector__value" id="qty-value">1</span>
+                <button class="quantity-selector__btn" id="qty-plus" aria-label="বাড়ান">+</button>
+              </div>
+            </div>
+
+            <!-- Order CTA Buttons -->
+            <div class="product-detail__cta" id="order-section">
+              <!-- Primary Order Button -->
+              <a href="#" class="btn btn--primary btn--full" id="btn-order-now">
+                🟢 এখনই অর্ডার করুন
+              </a>
+
+              <div class="order-btn-divider">অথবা</div>
+
+              <!-- WhatsApp & Telegram Buttons -->
+              <div class="product-detail__messaging-btns">
+                <a href="#" class="btn btn--whatsapp btn--full" id="btn-whatsapp" target="_blank" rel="noopener">
+                  💬 WhatsApp এ অর্ডার
+                </a>
+                <a href="#" class="btn btn--telegram btn--full" id="btn-telegram" target="_blank" rel="noopener">
+                  ✈️ Telegram এ অর্ডার
+                </a>
+              </div>
+            </div>
+
+            <!-- Out of Stock Message -->
+            <div class="product-detail__out-of-stock hidden" id="out-of-stock-msg">
+              <h3 class="product-detail__out-of-stock__title">😔 এই পণ্যটি বর্তমানে স্টকে নেই</h3>
+              <p class="product-detail__out-of-stock__desc">দয়া করে পরে আবার চেক করুন অথবা WhatsApp/Telegram-এ জিজ্ঞেস করুন।</p>
+            </div>
+
+            <!-- Share -->
+            <div class="product-detail__share" id="share-section">
+              <span class="product-detail__share-label">শেয়ার করুন:</span>
+              <div class="share-buttons" id="share-buttons"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════
+           PRODUCT TABS
+      ═══════════════════════════════════════════════════ -->
+      <div class="product-tabs" id="product-tabs">
+        <div class="product-tabs__header" id="tabs-header" role="tablist">
+          <button class="product-tab-btn active" data-tab="description" role="tab">বিবরণ</button>
+          <button class="product-tab-btn" data-tab="features" role="tab">বৈশিষ্ট্য</button>
+          <button class="product-tab-btn" data-tab="specifications" role="tab">স্পেসিফিকেশন</button>
+          <button class="product-tab-btn" data-tab="reviews" role="tab">রিভিউ <span id="tab-review-count"></span></button>
+        </div>
+
+        <!-- Description Tab -->
+        <div class="product-tab-content active" id="tab-description" role="tabpanel">
+          <div class="product-desc-content" id="description-content">
+            <p class="text-muted">বিবরণ লোড হচ্ছে...</p>
+          </div>
+          <!-- Warranty Box -->
+          <div class="warranty-box hidden" id="warranty-box">
+            <svg class="warranty-box__icon" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <div class="warranty-box__text" id="warranty-text"></div>
+          </div>
+        </div>
+
+        <!-- Features Tab -->
+        <div class="product-tab-content" id="tab-features" role="tabpanel">
+          <div class="features-list" id="features-list">
+            <p class="text-muted">কোনো বৈশিষ্ট্য যোগ করা হয়নি।</p>
+          </div>
+        </div>
+
+        <!-- Specifications Tab -->
+        <div class="product-tab-content" id="tab-specifications" role="tabpanel">
+          <div id="specifications-content">
+            <p class="text-muted">কোনো স্পেসিফিকেশন যোগ করা হয়নি।</p>
+          </div>
+        </div>
+
+        <!-- Reviews Tab -->
+        <div class="product-tab-content" id="tab-reviews" role="tabpanel">
+          <div class="reviews-list" id="reviews-list">
+            <p class="text-muted">এখনো কোনো রিভিউ নেই।</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════
+           RELATED PRODUCTS
+      ═══════════════════════════════════════════════════ -->
+      <section class="related-products" id="related-products">
+        <h2 class="related-products__title">সম্পর্কিত পণ্য</h2>
+        <div class="products-grid" id="related-grid">
+          <!-- JS থেকে load হবে -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer" id="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <h3 class="footer__brand-name">R BD SHOP</h3>
+          <p class="footer__desc">বাংলাদেশের সেরা ও বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম।</p>
+          <div class="footer__social" id="footer-social"></div>
+        </div>
+        <div>
+          <h4 class="footer__col-title">দ্রুত লিংক</h4>
+          <ul class="footer__links">
+            <li><a href="index.html" class="footer__link">হোম</a></li>
+            <li><a href="search.html" class="footer__link">সব পণ্য</a></li>
+            <li><a href="category.html" class="footer__link">ক্যাটাগরি</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">সাপোর্ট</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link" id="footer-wa">WhatsApp</a></li>
+            <li><a href="#" class="footer__link" id="footer-tg">Telegram</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">তথ্য</h4>
+          <ul class="footer__links">
+            <li><a href="index.html#features" class="footer__link">কেন আমরা?</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">© <span id="footer-year">2024</span> R BD SHOP — সর্বস্বত্ব সংরক্ষিত।</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══ MOBILE STICKY BAR (Product page only) ═══ -->
+  <div class="product-mobile-bar" id="product-mobile-bar">
+    <a href="#" class="btn btn--whatsapp" id="mobile-btn-whatsapp" target="_blank" rel="noopener">
+      💬 WhatsApp
+    </a>
+    <a href="#" class="btn btn--telegram" id="mobile-btn-telegram" target="_blank" rel="noopener">
+      ✈️ Telegram
+    </a>
+    <a href="#" class="btn btn--primary" id="mobile-btn-order">
+      🟢 অর্ডার
+    </a>
+  </div>
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="উপরে যান">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Zoom Modal Container -->
+  <div id="zoom-modal-root"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/product-detail.js"></script>
+
+</body>
+  </html>
