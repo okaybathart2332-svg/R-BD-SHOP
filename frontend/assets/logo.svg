@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" rx="40" fill="#2563EB"/>
+  <path d="M60 40L40 60v100a20 20 0 0020 20h80a20 20 0 0020-20V60l-20-20z" stroke="#FFFFFF" stroke-width="6" fill="none"/>
+  <line x1="40" y1="60" x2="160" y2="60" stroke="#FFFFFF" stroke-width="6"/>
+  <path d="M120 90a20 20 0 01-40 0" stroke="#FFFFFF" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <text x="100" y="155" text-anchor="middle" font-family="Inter,sans-serif" font-size="22" font-weight="900" fill="#FFFFFF" letter-spacing="-0.5">R BD SHOP</text>
+</svg>
