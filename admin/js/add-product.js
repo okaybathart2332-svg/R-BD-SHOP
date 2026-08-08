@@ -1,16 +1,13 @@
 /* ============================================================
-   R BD SHOP — Add Product JavaScript
+   R BD SHOP — Add Product (ImgBB Version)
    Path: admin/js/add-product.js
    ============================================================ */
 
-import { db, storage } from './firebase-config.js';
+import { db, uploadToImgBB } from './firebase-config.js';
 import {
   collection, addDoc, getDocs, query,
   where, orderBy, serverTimestamp, doc, updateDoc, increment
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import {
-  ref, uploadBytes, getDownloadURL
-} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
 import { requireAdmin, adminLogout } from './admin-auth.js';
 import {
@@ -21,41 +18,30 @@ import {
   escapeAdminHtml, aqs
 } from './admin-utils.js';
 
-/* ── STATE ── */
-let mainImageFile   = null;
-let galleryFiles    = [];
-let features        = [];
-let tags            = [];
+let mainImageFile = null;
+let galleryFiles  = [];
+let features      = [];
+let tags          = [];
 
-/* ── INIT ── */
 document.addEventListener('DOMContentLoaded', () => {
   initAdminTheme();
   requireAdmin(async (admin) => {
-    const sr = document.getElementById('sidebar-root');
-    const hr = document.getElementById('header-root');
-    if (sr) sr.innerHTML = buildAdminSidebarHTML(admin);
-    if (hr) hr.innerHTML = buildAdminHeaderHTML('পণ্য যোগ করুন', admin);
+    document.getElementById('sidebar-root').innerHTML = buildAdminSidebarHTML(admin);
+    document.getElementById('header-root').innerHTML = buildAdminHeaderHTML('পণ্য যোগ করুন', admin);
     initAdminSidebar();
     document.addEventListener('click', (e) => { if (e.target.closest('#admin-logout-btn')) { e.preventDefault(); adminLogout(); } });
 
-    // Generate product code
     aqs('#p-code').value = generateProductCode();
-
-    // Load categories
     await loadCategories();
-
-    // Setup all handlers
     setupImageUpload();
     setupTagsInput();
     setupFeaturesInput();
     setupSpecsRows();
     setupFormSubmit();
-
     hideAdminLoader();
   });
 });
 
-/* ── CATEGORIES ── */
 async function loadCategories() {
   const select = aqs('#p-category');
   if (!select) return;
@@ -68,12 +54,10 @@ async function loadCategories() {
       opt.textContent = cat.name;
       select.appendChild(opt);
     });
-  } catch (err) { console.warn('Categories load fail:', err); }
+  } catch { /* ignore */ }
 }
 
-/* ── IMAGE UPLOAD ── */
 function setupImageUpload() {
-  // Main image
   const mainArea = aqs('#main-image-upload');
   const mainInput = aqs('#main-image-file');
   const mainPreview = aqs('#main-image-preview');
@@ -102,7 +86,6 @@ function setupImageUpload() {
     aqs('#remove-main-img')?.addEventListener('click', () => { mainImageFile = null; mainPreview.innerHTML = ''; });
   }
 
-  // Gallery images
   const galArea = aqs('#gallery-image-upload');
   const galInput = aqs('#gallery-image-file');
   const galPreview = aqs('#gallery-image-preview');
@@ -119,22 +102,17 @@ function setupImageUpload() {
   }
 
   function addGalleryFiles(files) {
-    for (const f of files) {
-      if (galleryFiles.length >= 5) break;
-      galleryFiles.push(f);
-    }
+    for (const f of files) { if (galleryFiles.length >= 5) break; galleryFiles.push(f); }
     renderGalleryPreview();
   }
 
   function renderGalleryPreview() {
     if (!galPreview) return;
-    galPreview.innerHTML = galleryFiles.map((f, i) => {
-      const url = URL.createObjectURL(f);
-      return `<div class="image-preview-item">
-        <img src="${url}" alt="Gallery ${i}" />
+    galPreview.innerHTML = galleryFiles.map((f, i) => `
+      <div class="image-preview-item">
+        <img src="${URL.createObjectURL(f)}" alt="Gallery ${i}" />
         <button type="button" class="image-preview-item__remove" data-gal-idx="${i}">✕</button>
-      </div>`;
-    }).join('');
+      </div>`).join('');
     galPreview.querySelectorAll('[data-gal-idx]').forEach((btn) => {
       btn.addEventListener('click', () => {
         galleryFiles.splice(parseInt(btn.dataset.galIdx), 1);
@@ -144,14 +122,8 @@ function setupImageUpload() {
   }
 }
 
-/* ── TAGS INPUT ── */
-function setupTagsInput() {
-  setupGenericTags('tag-text-input', 'tags-input', tags);
-}
-
-function setupFeaturesInput() {
-  setupGenericTags('feature-text-input', 'features-input', features);
-}
+function setupTagsInput()     { setupGenericTags('tag-text-input', 'tags-input', tags); }
+function setupFeaturesInput() { setupGenericTags('feature-text-input', 'features-input', features); }
 
 function setupGenericTags(inputId, containerId, array) {
   const input = aqs(`#${inputId}`);
@@ -164,40 +136,28 @@ function setupGenericTags(inputId, containerId, array) {
       const val = input.value.trim();
       if (val && !array.includes(val)) {
         array.push(val);
-        renderTags(container, array, inputId);
+        renderTags();
       }
       input.value = '';
     }
   });
 
-  function renderTags(cont, arr, iid) {
-    const tagsHtml = arr.map((t, i) => `
-      <span class="tags-input__tag">
-        ${escapeAdminHtml(t)}
-        <button type="button" class="tags-input__tag-remove" data-tag-idx="${i}" data-tag-group="${iid}">✕</button>
+  function renderTags() {
+    const tagsHtml = array.map((t, i) => `
+      <span class="tags-input__tag">${escapeAdminHtml(t)}
+        <button type="button" class="tags-input__tag-remove" data-tag-idx="${i}">✕</button>
       </span>`).join('');
-    const inputEl = cont.querySelector(`#${iid}`);
-    cont.innerHTML = tagsHtml;
-    cont.appendChild(inputEl || document.createElement('input'));
-    // Re-get input
-    const newInput = cont.querySelector(`#${iid}`);
-    if (!newInput) {
-      const ni = document.createElement('input');
-      ni.type = 'text'; ni.className = 'tags-input__input';
-      ni.id = iid; ni.placeholder = 'Enter চাপুন';
-      cont.appendChild(ni);
-      setupGenericTags(iid, containerId, arr);
-    }
-    cont.querySelectorAll('[data-tag-idx]').forEach((btn) => {
+    container.innerHTML = tagsHtml + `<input type="text" class="tags-input__input" id="${inputId}" placeholder="Enter চাপুন" />`;
+    container.querySelectorAll('[data-tag-idx]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        arr.splice(parseInt(btn.dataset.tagIdx), 1);
-        renderTags(cont, arr, iid);
+        array.splice(parseInt(btn.dataset.tagIdx), 1);
+        renderTags();
       });
     });
+    setupGenericTags(inputId, containerId, array);
   }
 }
 
-/* ── SPECS ROWS ── */
 function setupSpecsRows() {
   aqs('#add-spec-row')?.addEventListener('click', () => {
     const list = aqs('#specs-list');
@@ -211,26 +171,20 @@ function setupSpecsRows() {
     list.appendChild(row);
     row.querySelector('.key-value-row__remove').addEventListener('click', () => row.remove());
   });
-
-  // Initial row remove
   document.querySelectorAll('.key-value-row__remove').forEach((btn) => {
     btn.addEventListener('click', () => btn.closest('.key-value-row').remove());
   });
 }
 
-/* ── FORM SUBMIT ── */
 function setupFormSubmit() {
   const form = aqs('#product-form');
-  const publishBtn = aqs('#btn-publish');
   const draftBtn = aqs('#btn-draft');
-
   if (draftBtn) {
     draftBtn.addEventListener('click', () => {
       aqs('#p-status').value = 'draft';
       form.requestSubmit();
     });
   }
-
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     await saveProduct();
@@ -239,8 +193,7 @@ function setupFormSubmit() {
 
 async function saveProduct() {
   const btn = aqs('#btn-publish');
-
-  const name  = aqs('#p-name').value.trim();
+  const name = aqs('#p-name').value.trim();
   const price = parseInt(aqs('#p-price').value) || 0;
   const stock = parseInt(aqs('#p-stock').value) || 0;
   const category = aqs('#p-category').value;
@@ -255,22 +208,18 @@ async function saveProduct() {
     const productCode = aqs('#p-code').value || generateProductCode();
     const slug = createAdminSlug(name) || `product-${Date.now()}`;
 
-    // Upload main image
+    // Upload main image to ImgBB
     let mainImageURL = '';
     if (mainImageFile) {
-      const path = `products/${productCode}/main_${Date.now()}`;
-      const imgRef = ref(storage, path);
-      await uploadBytes(imgRef, mainImageFile);
-      mainImageURL = await getDownloadURL(imgRef);
+      adminShowToast('প্রধান ছবি upload হচ্ছে...', 'info');
+      mainImageURL = await uploadToImgBB(mainImageFile);
     }
 
-    // Upload gallery images
+    // Upload gallery images to ImgBB
     const galleryURLs = [];
     for (let i = 0; i < galleryFiles.length; i++) {
-      const path = `products/${productCode}/gallery_${i}_${Date.now()}`;
-      const imgRef = ref(storage, path);
-      await uploadBytes(imgRef, galleryFiles[i]);
-      const url = await getDownloadURL(imgRef);
+      adminShowToast(`গ্যালারি ছবি ${i + 1} upload হচ্ছে...`, 'info');
+      const url = await uploadToImgBB(galleryFiles[i]);
       galleryURLs.push(url);
     }
 
@@ -287,36 +236,28 @@ async function saveProduct() {
     const discount = parseInt(aqs('#p-discount').value) || (oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0);
 
     const productData = {
-      name,
-      slug,
-      productCode,
-      categoryName:        category,
-      brand:               aqs('#p-brand').value.trim(),
-      mainImage:           mainImageURL,
-      galleryImages:       galleryURLs,
-      price,
-      oldPrice:            oldPrice,
-      discount,
-      stockQuantity:       stock,
-      shortDescription:    aqs('#p-short-desc').value.trim(),
-      fullDescription:     aqs('#p-full-desc').value.trim(),
-      features,
-      specifications:      specs,
-      warrantyInfo:        aqs('#p-warranty').value.trim(),
+      name, slug, productCode,
+      categoryName: category,
+      brand: aqs('#p-brand').value.trim(),
+      mainImage: mainImageURL,
+      galleryImages: galleryURLs,
+      price, oldPrice, discount,
+      stockQuantity: stock,
+      shortDescription: aqs('#p-short-desc').value.trim(),
+      fullDescription: aqs('#p-full-desc').value.trim(),
+      features, specifications: specs,
+      warrantyInfo: aqs('#p-warranty').value.trim(),
       tags,
       whatsappOrderEnabled: aqs('#p-whatsapp').checked,
       telegramOrderEnabled: aqs('#p-telegram').checked,
-      status:              aqs('#p-status').value,
-      averageRating:       0,
-      reviewCount:         0,
-      totalSold:           0,
-      createdAt:           serverTimestamp(),
-      updatedAt:           serverTimestamp(),
+      status: aqs('#p-status').value,
+      averageRating: 0, reviewCount: 0, totalSold: 0,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     };
 
-    const docRef = await addDoc(collection(db, 'products'), productData);
+    await addDoc(collection(db, 'products'), productData);
 
-    // Update category product count
     try {
       const catSnap = await getDocs(query(collection(db, 'categories'), where('name', '==', category)));
       catSnap.forEach(async (catDoc) => {
@@ -325,14 +266,11 @@ async function saveProduct() {
     } catch { /* ignore */ }
 
     adminShowToast('পণ্য সফলভাবে যোগ হয়েছে! ✅', 'success');
-
-    setTimeout(() => {
-      window.location.href = 'products.html';
-    }, 1000);
+    setTimeout(() => window.location.href = 'products.html', 1000);
 
   } catch (err) {
-    console.error('[AddProduct] Error:', err);
-    adminShowToast('পণ্য সেভ করতে সমস্যা হয়েছে: ' + err.message, 'error');
+    console.error('[AddProduct]', err);
+    adminShowToast('সেভ ব্যর্থ: ' + err.message, 'error');
     setBtnLoading(btn, false, '🚀 পাবলিশ করুন');
   }
-      }
+   }
