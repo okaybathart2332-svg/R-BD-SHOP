@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>অর্ডার | R BD SHOP Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="../frontend/assets/favicon.ico" type="image/x-icon" />
+  <script>(function(){try{var s=localStorage.getItem('rbd-theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');else if(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/admin-variables.css" />
+  <link rel="stylesheet" href="css/admin-base.css" />
+  <link rel="stylesheet" href="css/admin-layout.css" />
+  <link rel="stylesheet" href="css/admin-components.css" />
+  <link rel="stylesheet" href="css/admin-responsive.css" />
+</head>
+<body>
+  <div id="admin-page-loader"><div class="admin-loader-content"><span class="admin-loader-logo">R BD SHOP</span><div class="a-spinner a-spinner--lg"></div></div></div>
+
+  <div class="admin-wrapper">
+    <div id="sidebar-root"></div>
+    <main class="admin-main">
+      <div id="header-root"></div>
+      <div class="admin-content">
+
+        <div class="admin-page-header">
+          <div class="admin-page-header__left">
+            <h2 class="admin-page-header__title">অর্ডার ম্যানেজমেন্ট</h2>
+            <p class="admin-page-header__desc">সব অর্ডার দেখুন, স্ট্যাটাস আপডেট করুন, নতুন অর্ডার যোগ করুন</p>
+          </div>
+          <div class="admin-page-header__actions">
+            <button class="a-btn a-btn--primary" id="btn-add-order">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              নতুন অর্ডার
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="admin-stats-grid" id="order-stats" style="margin-bottom:var(--a-space-5)">
+          <div class="admin-stat-card"><div style="padding:var(--a-space-6);width:100%;text-align:center"><div class="a-spinner"></div></div></div>
+          <div class="admin-stat-card"><div style="padding:var(--a-space-6);width:100%;text-align:center"><div class="a-spinner"></div></div></div>
+          <div class="admin-stat-card"><div style="padding:var(--a-space-6);width:100%;text-align:center"><div class="a-spinner"></div></div></div>
+          <div class="admin-stat-card"><div style="padding:var(--a-space-6);width:100%;text-align:center"><div class="a-spinner"></div></div></div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="a-card">
+          <div class="table-controls">
+            <div class="table-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" id="order-search" placeholder="অর্ডার নম্বর, গ্রাহকের নাম..." />
+            </div>
+            <div class="table-filter-btns" id="order-status-filters">
+              <button class="table-filter-btn active" data-status="all">সব</button>
+              <button class="table-filter-btn" data-status="pending">পেন্ডিং</button>
+              <button class="table-filter-btn" data-status="confirmed">কনফার্মড</button>
+              <button class="table-filter-btn" data-status="processing">প্রসেসিং</button>
+              <button class="table-filter-btn" data-status="shipped">শিপড</button>
+              <button class="table-filter-btn" data-status="delivered">ডেলিভারড</button>
+              <button class="table-filter-btn" data-status="cancelled">বাতিল</button>
+            </div>
+          </div>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>অর্ডার নং</th>
+                  <th>গ্রাহক</th>
+                  <th>পণ্য</th>
+                  <th>পরিমাণ</th>
+                  <th>মোট</th>
+                  <th>সোর্স</th>
+                  <th>স্ট্যাটাস</th>
+                  <th>তারিখ</th>
+                  <th style="text-align:right">অ্যাকশন</th>
+                </tr>
+              </thead>
+              <tbody id="orders-tbody"></tbody>
+            </table>
+          </div>
+          <div class="table-pagination" id="order-pagination">
+            <span class="table-pagination__info" id="order-pagination-info">—</span>
+            <div class="table-pagination__btns" id="order-pagination-btns"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="admin-toast-container"></div>
+  <script type="module" src="js/orders.js"></script>
+</body>
+                                                                             </html>
