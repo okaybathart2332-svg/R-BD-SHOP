@@ -1,0 +1,424 @@
+<!-- ============================================================
+   R BD SHOP — Admin Login Page
+   Path: admin/index.html
+   ============================================================ -->
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login | R BD SHOP</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="../frontend/assets/favicon.ico" type="image/x-icon" />
+
+  <!-- FOUC Prevention -->
+  <script>
+    (function(){
+      try{
+        var s=localStorage.getItem('rbd-theme');
+        if(s==='dark') document.documentElement.setAttribute('data-theme','dark');
+        else if(!s && window.matchMedia('(prefers-color-scheme:dark)').matches)
+          document.documentElement.setAttribute('data-theme','dark');
+      }catch(e){}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/admin-variables.css" />
+  <link rel="stylesheet" href="css/admin-base.css" />
+
+  <style>
+    /* ── Login Page Specific ── */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--a-space-4);
+      background: var(--a-content-bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-page::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37,99,235,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .login-page::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      left: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .login-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      background: var(--a-card-bg);
+      border: 1px solid var(--a-card-border);
+      border-radius: var(--a-card-radius);
+      box-shadow: var(--a-shadow-lg);
+      padding: var(--a-space-10) var(--a-space-8);
+      animation: loginFadeIn 0.5s ease;
+    }
+
+    @keyframes loginFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-card__logo {
+      text-align: center;
+      margin-bottom: var(--a-space-8);
+    }
+
+    .login-card__logo-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--a-gradient-primary);
+      border-radius: var(--a-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--a-space-4);
+      box-shadow: 0 4px 20px var(--a-primary-shadow);
+    }
+
+    .login-card__logo-icon svg {
+      width: 28px;
+      height: 28px;
+      color: #FFFFFF;
+    }
+
+    .login-card__logo-name {
+      font-size: var(--a-font-2xl);
+      font-weight: 900;
+      color: var(--a-text-primary);
+      letter-spacing: -0.03em;
+    }
+
+    .login-card__logo-name span { color: var(--a-primary); }
+
+    .login-card__logo-sub {
+      font-size: var(--a-font-sm);
+      color: var(--a-text-muted);
+      margin-top: 4px;
+    }
+
+    .login-card__title {
+      font-size: var(--a-font-lg);
+      font-weight: 700;
+      color: var(--a-text-primary);
+      text-align: center;
+      margin-bottom: var(--a-space-6);
+    }
+
+    .login-error {
+      display: none;
+      padding: var(--a-space-3) var(--a-space-4);
+      background: var(--a-danger-bg);
+      border: 1px solid var(--a-danger-border);
+      border-radius: var(--a-radius-sm);
+      color: var(--a-danger);
+      font-size: var(--a-font-sm);
+      font-weight: 500;
+      margin-bottom: var(--a-space-4);
+      text-align: center;
+    }
+
+    .login-error.visible { display: block; }
+
+    .login-input-group {
+      margin-bottom: var(--a-space-5);
+    }
+
+    .login-input-group label {
+      display: block;
+      font-size: var(--a-font-sm);
+      font-weight: 600;
+      color: var(--a-text-primary);
+      margin-bottom: var(--a-space-2);
+    }
+
+    .login-input-wrap {
+      position: relative;
+    }
+
+    .login-input-wrap svg {
+      position: absolute;
+      left: var(--a-space-3);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--a-text-muted);
+      pointer-events: none;
+    }
+
+    .login-input-wrap input {
+      padding-left: 42px;
+      height: 48px;
+      font-size: var(--a-font-base);
+    }
+
+    .login-password-toggle {
+      position: absolute;
+      right: var(--a-space-3);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--a-text-muted);
+      cursor: pointer;
+      border-radius: var(--a-radius-xs);
+      transition: var(--a-transition-fast);
+      background: none;
+      border: none;
+    }
+
+    .login-password-toggle:hover {
+      color: var(--a-primary);
+      background: var(--a-primary-glow);
+    }
+
+    .login-password-toggle svg { width: 18px; height: 18px; }
+
+    .login-submit {
+      width: 100%;
+      height: 50px;
+      font-size: var(--a-font-md);
+      font-weight: 700;
+      margin-top: var(--a-space-2);
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: var(--a-space-6);
+      font-size: var(--a-font-xs);
+      color: var(--a-text-muted);
+    }
+
+    .login-theme-toggle {
+      position: fixed;
+      top: var(--a-space-4);
+      right: var(--a-space-4);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--a-radius-sm);
+      background: var(--a-card-bg);
+      border: 1px solid var(--a-border);
+      color: var(--a-text-muted);
+      cursor: pointer;
+      transition: var(--a-transition-fast);
+      z-index: 10;
+    }
+
+    .login-theme-toggle:hover {
+      color: var(--a-primary);
+      border-color: var(--a-primary);
+    }
+
+    .login-theme-toggle svg { width: 18px; height: 18px; }
+
+    [data-theme="dark"] .login-theme-toggle .icon-sun { display: flex; }
+    [data-theme="dark"] .login-theme-toggle .icon-moon { display: none; }
+    :root:not([data-theme="dark"]) .login-theme-toggle .icon-sun { display: none; }
+    :root:not([data-theme="dark"]) .login-theme-toggle .icon-moon { display: flex; }
+
+    @media (max-width: 479px) {
+      .login-card {
+        padding: var(--a-space-6) var(--a-space-5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Theme Toggle -->
+  <button class="login-theme-toggle" data-admin-theme-toggle title="থিম পরিবর্তন">
+    <span class="icon-sun" style="display:flex;align-items:center;justify-content:center">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42
+                 M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+    </span>
+    <span class="icon-moon" style="display:flex;align-items:center;justify-content:center">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+      </svg>
+    </span>
+  </button>
+
+  <div class="login-page">
+    <div class="login-card">
+
+      <!-- Logo -->
+      <div class="login-card__logo">
+        <div class="login-card__logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+        </div>
+        <h1 class="login-card__logo-name"><span>R BD</span> SHOP</h1>
+        <p class="login-card__logo-sub">Admin Panel</p>
+      </div>
+
+      <h2 class="login-card__title">অ্যাডমিন লগইন</h2>
+
+      <!-- Error Message -->
+      <div class="login-error" id="login-error"></div>
+
+      <!-- Login Form -->
+      <form id="login-form" autocomplete="off">
+        <div class="login-input-group">
+          <label for="login-email">ইমেইল</label>
+          <div class="login-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input
+              type="email"
+              id="login-email"
+              placeholder="admin@rbdshop.com"
+              required
+              autofocus
+            />
+          </div>
+        </div>
+
+        <div class="login-input-group">
+          <label for="login-password">পাসওয়ার্ড</label>
+          <div class="login-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            <input
+              type="password"
+              id="login-password"
+              placeholder="আপনার পাসওয়ার্ড"
+              required
+              minlength="6"
+            />
+            <button type="button" class="login-password-toggle" id="toggle-password" aria-label="পাসওয়ার্ড দেখুন">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eye-icon">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="a-btn a-btn--primary login-submit" id="login-btn">
+          লগইন করুন
+        </button>
+      </form>
+
+      <p class="login-footer">
+        © <span id="login-year">2024</span> R BD SHOP — সর্বস্বত্ব সংরক্ষিত
+      </p>
+    </div>
+  </div>
+
+  <div id="admin-toast-container"></div>
+
+  <script type="module">
+    import { redirectIfLoggedIn, adminLogin } from './js/admin-auth.js';
+    import { initAdminTheme, adminShowToast, setBtnLoading } from './js/admin-utils.js';
+
+    // Theme init
+    initAdminTheme();
+
+    // Year
+    const yearEl = document.getElementById('login-year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    // If already logged in → redirect to dashboard
+    redirectIfLoggedIn(() => {
+      // Not logged in — show the page (already visible)
+    });
+
+    // Password toggle
+    const toggleBtn   = document.getElementById('toggle-password');
+    const passwordEl  = document.getElementById('login-password');
+    if (toggleBtn && passwordEl) {
+      toggleBtn.addEventListener('click', () => {
+        const isPassword = passwordEl.type === 'password';
+        passwordEl.type = isPassword ? 'text' : 'password';
+        toggleBtn.title = isPassword ? 'পাসওয়ার্ড লুকান' : 'পাসওয়ার্ড দেখুন';
+      });
+    }
+
+    // Login form submit
+    const form     = document.getElementById('login-form');
+    const errorEl  = document.getElementById('login-error');
+    const loginBtn = document.getElementById('login-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email    = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        showError('ইমেইল ও পাসওয়ার্ড দিন।');
+        return;
+      }
+
+      // Loading state
+      setBtnLoading(loginBtn, true);
+      hideError();
+
+      const result = await adminLogin(email, password);
+
+      if (result.success) {
+        adminShowToast('লগইন সফল! রিডাইরেক্ট হচ্ছে...', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 500);
+      } else {
+        setBtnLoading(loginBtn, false, 'লগইন করুন');
+        showError(result.error);
+      }
+    });
+
+    function showError(msg) {
+      if (!errorEl) return;
+      errorEl.textContent = msg;
+      errorEl.classList.add('visible');
+    }
+
+    function hideError() {
+      if (!errorEl) return;
+      errorEl.classList.remove('visible');
+      errorEl.textContent = '';
+    }
+  </script>
+
+</body>
+  </html>
