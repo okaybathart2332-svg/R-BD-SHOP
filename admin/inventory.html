@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ইনভেন্টরি | R BD SHOP Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="../frontend/assets/favicon.ico" type="image/x-icon" />
+  <script>(function(){try{var s=localStorage.getItem('rbd-theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');else if(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/admin-variables.css" />
+  <link rel="stylesheet" href="css/admin-base.css" />
+  <link rel="stylesheet" href="css/admin-layout.css" />
+  <link rel="stylesheet" href="css/admin-components.css" />
+  <link rel="stylesheet" href="css/admin-responsive.css" />
+</head>
+<body>
+  <div id="admin-page-loader"><div class="admin-loader-content"><span class="admin-loader-logo">R BD SHOP</span><div class="a-spinner a-spinner--lg"></div></div></div>
+  <div class="admin-wrapper">
+    <div id="sidebar-root"></div>
+    <main class="admin-main">
+      <div id="header-root"></div>
+      <div class="admin-content">
+        <div class="admin-page-header">
+          <div class="admin-page-header__left">
+            <h2 class="admin-page-header__title">ইনভেন্টরি ম্যানেজমেন্ট</h2>
+            <p class="admin-page-header__desc">স্টক বাড়ান/কমান, স্টক হিস্ট্রি দেখুন</p>
+          </div>
+        </div>
+        <!-- Inventory Table -->
+        <div class="a-card">
+          <div class="table-controls">
+            <div class="table-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" id="inv-search" placeholder="পণ্যের নাম বা কোড..." />
+            </div>
+          </div>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>পণ্য</th>
+                  <th>কোড</th>
+                  <th>বর্তমান স্টক</th>
+                  <th>স্টক পরিবর্তন</th>
+                  <th>স্ট্যাটাস</th>
+                  <th style="text-align:right">হিস্ট্রি</th>
+                </tr>
+              </thead>
+              <tbody id="inv-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Stock History Modal Root -->
+        <div id="history-section" class="a-card a-hidden" style="margin-top:var(--a-space-5)">
+          <div class="a-card__header">
+            <h3 class="a-card__title" id="history-title">স্টক হিস্ট্রি</h3>
+            <button class="a-btn a-btn--ghost a-btn--sm" id="close-history">বন্ধ করুন</button>
+          </div>
+          <div class="a-card__body">
+            <div class="stock-history-list" id="history-list"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div id="admin-toast-container"></div>
+  <script type="module" src="js/inventory.js"></script>
+</body>
+  </html>
