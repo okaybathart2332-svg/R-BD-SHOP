@@ -1,5 +1,5 @@
 /* ============================================================
-   R BD SHOP — Categories Management JavaScript
+   R BD SHOP — Categories Management (Fixed)
    Path: admin/js/categories.js
    ============================================================ */
 
@@ -20,7 +20,6 @@ import {
 
 let allCategories = [];
 
-/* ── INIT ── */
 document.addEventListener('DOMContentLoaded', () => {
   initAdminTheme();
   requireAdmin(async (admin) => {
@@ -32,14 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => { if (e.target.closest('#admin-logout-btn')) { e.preventDefault(); adminLogout(); } });
 
     await loadCategories();
-
     aqs('#btn-add-category')?.addEventListener('click', () => showCategoryModal());
-
     hideAdminLoader();
   });
 });
 
-/* ── LOAD ── */
 async function loadCategories() {
   const tbody = aqs('#categories-tbody');
   if (tbody) tbody.innerHTML = tableLoadingRow(6);
@@ -48,6 +44,17 @@ async function loadCategories() {
     const snap = await getDocs(query(collection(db, 'categories'), orderBy('name')));
     allCategories = [];
     snap.forEach((d) => allCategories.push({ id: d.id, ...d.data() }));
+
+    // ✅ Auto-fix: যেসব category-তে status নেই সেগুলো active করে দাও
+    for (const cat of allCategories) {
+      if (!cat.status) {
+        try {
+          await updateDoc(doc(db, 'categories', cat.id), { status: 'active' });
+          cat.status = 'active';
+        } catch { /* ignore */ }
+      }
+    }
+
     renderTable();
   } catch (err) {
     console.error('[Categories] Load error:', err);
@@ -83,7 +90,6 @@ function renderTable() {
       </td>
     </tr>`).join('');
 
-  // Events
   tbody.querySelectorAll('[data-edit-cat]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const cat = allCategories.find((c) => c.id === btn.dataset.editCat);
@@ -113,10 +119,9 @@ function renderTable() {
   });
 }
 
-/* ── MODAL ── */
 function showCategoryModal(existingCat = null) {
   const isEdit = !!existingCat;
-  const root   = aqs('#modal-root');
+  const root = aqs('#modal-root');
   if (!root) return;
 
   root.innerHTML = `
@@ -140,7 +145,7 @@ function showCategoryModal(existingCat = null) {
           <div class="a-form-group">
             <label class="a-form-label">স্ট্যাটাস</label>
             <select id="cat-status">
-              <option value="active" ${isEdit && existingCat.status === 'active' ? 'selected' : ''}>সক্রিয়</option>
+              <option value="active" ${(!isEdit || existingCat.status === 'active') ? 'selected' : ''}>সক্রিয়</option>
               <option value="inactive" ${isEdit && existingCat.status === 'inactive' ? 'selected' : ''}>নিষ্ক্রিয়</option>
             </select>
           </div>
@@ -159,8 +164,8 @@ function showCategoryModal(existingCat = null) {
   aqs('#cat-modal-overlay')?.addEventListener('click', (e) => { if (e.target.id === 'cat-modal-overlay') closeModal(); });
 
   aqs('#save-cat-btn')?.addEventListener('click', async () => {
-    const name   = aqs('#cat-name').value.trim();
-    const desc   = aqs('#cat-desc').value.trim();
+    const name = aqs('#cat-name').value.trim();
+    const desc = aqs('#cat-desc').value.trim();
     const status = aqs('#cat-status').value;
 
     if (!name) { adminShowToast('ক্যাটাগরি নাম দিন', 'error'); return; }
@@ -179,7 +184,7 @@ function showCategoryModal(existingCat = null) {
           name,
           slug: createAdminSlug(name),
           description: desc,
-          status,
+          status: status || 'active',
           productCount: 0,
           createdAt: serverTimestamp(),
         });
@@ -194,4 +199,4 @@ function showCategoryModal(existingCat = null) {
       adminShowToast('সেভ ব্যর্থ', 'error');
     }
   });
-                                                }
+             }
