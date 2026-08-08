@@ -1,0 +1,117 @@
+<!-- ============================================================
+   R BD SHOP — Admin Product List
+   Path: admin/products.html
+   ============================================================ -->
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>পণ্য তালিকা | R BD SHOP Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="../frontend/assets/favicon.ico" type="image/x-icon" />
+
+  <script>
+    (function(){try{var s=localStorage.getItem('rbd-theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');else if(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();
+  </script>
+
+  <link rel="stylesheet" href="css/admin-variables.css" />
+  <link rel="stylesheet" href="css/admin-base.css" />
+  <link rel="stylesheet" href="css/admin-layout.css" />
+  <link rel="stylesheet" href="css/admin-components.css" />
+  <link rel="stylesheet" href="css/admin-responsive.css" />
+</head>
+
+<body>
+
+  <div id="admin-page-loader">
+    <div class="admin-loader-content">
+      <span class="admin-loader-logo">R BD SHOP</span>
+      <div class="a-spinner a-spinner--lg"></div>
+    </div>
+  </div>
+
+  <div class="admin-wrapper">
+    <div id="sidebar-root"></div>
+
+    <main class="admin-main">
+      <div id="header-root"></div>
+
+      <div class="admin-content">
+
+        <!-- Page Header -->
+        <div class="admin-page-header">
+          <div class="admin-page-header__left">
+            <h2 class="admin-page-header__title">পণ্য তালিকা</h2>
+            <p class="admin-page-header__desc">সব পণ্য দেখুন, এডিট করুন, মুছে ফেলুন</p>
+          </div>
+          <div class="admin-page-header__actions">
+            <a href="add-product.html" class="a-btn a-btn--primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              নতুন পণ্য
+            </a>
+          </div>
+        </div>
+
+        <!-- Product Table Card -->
+        <div class="a-card">
+
+          <!-- Table Controls -->
+          <div class="table-controls">
+            <div class="table-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input type="text" id="product-search" placeholder="নাম, কোড, ক্যাটাগরি খুঁজুন..." />
+            </div>
+
+            <div class="table-filter-btns" id="status-filters">
+              <button class="table-filter-btn active" data-status="all">সব</button>
+              <button class="table-filter-btn" data-status="published">পাবলিশড</button>
+              <button class="table-filter-btn" data-status="draft">ড্রাফট</button>
+              <button class="table-filter-btn" data-status="outofstock">স্টক শেষ</button>
+              <button class="table-filter-btn" data-status="hidden">লুকানো</button>
+            </div>
+          </div>
+
+          <!-- Data Table -->
+          <div class="data-table-wrapper">
+            <table class="data-table" id="products-table">
+              <thead>
+                <tr>
+                  <th>পণ্য</th>
+                  <th>কোড</th>
+                  <th>ক্যাটাগরি</th>
+                  <th>মূল্য</th>
+                  <th>স্টক</th>
+                  <th>স্ট্যাটাস</th>
+                  <th>তারিখ</th>
+                  <th style="text-align:right">অ্যাকশন</th>
+                </tr>
+              </thead>
+              <tbody id="products-tbody">
+                <!-- JS থেকে dynamic -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Table Pagination -->
+          <div class="table-pagination" id="table-pagination">
+            <span class="table-pagination__info" id="pagination-info">—</span>
+            <div class="table-pagination__btns" id="pagination-btns"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div id="admin-toast-container"></div>
+
+  <script type="module" src="js/product-list.js"></script>
+
+</body>
+          </html>
