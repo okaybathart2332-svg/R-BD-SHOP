@@ -1,0 +1,680 @@
+<!-- ============================================================
+   R BD SHOP — Home Page
+   Path: frontend/index.html
+   ============================================================ -->
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Meta -->
+  <title>R BD SHOP — আপনার বিশ্বস্ত অনলাইন শপ</title>
+  <meta name="description" content="R BD SHOP — বাংলাদেশের সেরা অনলাইন শপিং প্ল্যাটফর্ম। সেরা মানের পণ্য, সাশ্রয়ী মূল্য, দ্রুত ডেলিভারি। WhatsApp ও Telegram-এ অর্ডার করুন।" />
+  <meta name="keywords" content="R BD SHOP, online shop bangladesh, best price, electronics, gadgets" />
+  <meta name="author" content="R BD SHOP" />
+  <link rel="canonical" href="এখানে আপনার Customer Site URL বসান" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="R BD SHOP" />
+  <meta property="og:title" content="R BD SHOP — আপনার বিশ্বস্ত অনলাইন শপ" />
+  <meta property="og:description" content="সেরা মানের পণ্য, সাশ্রয়ী মূল্য, দ্রুত ডেলিভারি। WhatsApp ও Telegram-এ অর্ডার করুন।" />
+  <meta property="og:image" content="assets/og-default.jpg" />
+  <meta property="og:url" content="এখানে আপনার Customer Site URL বসান" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="R BD SHOP — আপনার বিশ্বস্ত অনলাইন শপ" />
+  <meta name="twitter:description" content="সেরা মানের পণ্য, সাশ্রয়ী মূল্য, দ্রুত ডেলিভারি।" />
+  <meta name="twitter:image" content="assets/og-default.jpg" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+
+  <!-- FOUC Prevention — theme load before CSS renders -->
+  <script>
+    (function(){
+      try{
+        var s=localStorage.getItem('rbd-theme');
+        if(s==='dark'){document.documentElement.setAttribute('data-theme','dark')}
+        else if(!s){
+          if(window.matchMedia('(prefers-color-scheme:dark)').matches)
+            document.documentElement.setAttribute('data-theme','dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/header.css" />
+  <link rel="stylesheet" href="css/home.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "R BD SHOP",
+    "url": "এখানে আপনার Customer Site URL বসান",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "এখানে আপনার Customer Site URL বসান/search.html?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+</head>
+
+<body>
+
+  <!-- ═══ PAGE LOADER ═══ -->
+  <div id="page-loader" aria-hidden="true">
+    <div class="loader-logo">
+      <span class="loader-logo__text">R BD SHOP</span>
+      <div class="loader-spinner"></div>
+    </div>
+  </div>
+
+  <!-- ═══ HEADER (JS থেকে inject হবে) ═══ -->
+  <div id="header-root"></div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero__container">
+
+      <!-- Left Content -->
+      <div class="hero__content">
+        <div class="hero__tag">
+          <span class="hero__tag-dot"></span>
+          বাংলাদেশের সেরা অনলাইন শপ
+        </div>
+
+        <h1 class="hero__title">
+          <span class="hero__title-gradient">R BD SHOP</span>-এ
+          <br />আপনাকে স্বাগতম
+        </h1>
+
+        <p class="hero__desc">
+          সেরা মানের পণ্য, সাশ্রয়ী মূল্য, এবং দ্রুত ডেলিভারি — সব একটি প্ল্যাটফর্মে।
+          WhatsApp বা Telegram-এ সরাসরি অর্ডার করুন, ঝামেলাহীন শপিং অভিজ্ঞতা নিন।
+        </p>
+
+        <div class="hero__actions">
+          <a href="search.html" class="hero__btn-primary">
+            🛒 এখনই কিনুন
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#featured-products" class="hero__btn-secondary">
+            পণ্য দেখুন
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Mini Stats -->
+        <div class="hero__stats" id="hero-stats">
+          <div class="hero__stat">
+            <span class="hero__stat-value" id="stat-products">—</span>
+            <span class="hero__stat-label">মোট পণ্য</span>
+          </div>
+          <span class="hero__stat-sep"></span>
+          <div class="hero__stat">
+            <span class="hero__stat-value" id="stat-happy">১০০+</span>
+            <span class="hero__stat-label">সন্তুষ্ট ক্রেতা</span>
+          </div>
+          <span class="hero__stat-sep"></span>
+          <div class="hero__stat">
+            <span class="hero__stat-value">24/7</span>
+            <span class="hero__stat-label">সাপোর্ট</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Visual -->
+      <div class="hero__visual">
+        <div class="hero__visual-main">
+          <!-- R BD SHOP SVG Illustration -->
+          <svg class="hero__illustration" viewBox="0 0 400 400"
+               fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Shopping bag -->
+            <rect x="100" y="80" width="200" height="240" rx="20"
+                  fill="rgba(37,99,235,0.15)" stroke="rgba(37,99,235,0.4)" stroke-width="2"/>
+            <!-- Bag handle -->
+            <path d="M160 80V60a40 40 0 0180 0v20"
+                  stroke="rgba(59,130,246,0.6)" stroke-width="3" fill="none"/>
+            <!-- Star -->
+            <path d="M200 140l15 30 33 5-24 23 6 33-30-16-30 16 6-33-24-23 33-5z"
+                  fill="rgba(59,130,246,0.3)" stroke="rgba(37,99,235,0.5)" stroke-width="1.5"/>
+            <!-- Lines -->
+            <line x1="150" y1="240" x2="250" y2="240" stroke="rgba(37,99,235,0.2)" stroke-width="2"/>
+            <line x1="160" y1="260" x2="240" y2="260" stroke="rgba(37,99,235,0.15)" stroke-width="2"/>
+            <line x1="170" y1="280" x2="230" y2="280" stroke="rgba(37,99,235,0.1)" stroke-width="2"/>
+          </svg>
+
+          <!-- Floating Badges -->
+          <div class="hero__floating-badge hero__floating-badge--1">
+            <div class="hero__floating-badge__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5"/>
+              </svg>
+            </div>
+            <div class="hero__floating-badge__text">
+              <span class="hero__floating-badge__title">সেরা মান</span>
+              <span class="hero__floating-badge__sub">গ্যারান্টি সহ</span>
+            </div>
+          </div>
+
+          <div class="hero__floating-badge hero__floating-badge--2">
+            <div class="hero__floating-badge__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <div class="hero__floating-badge__text">
+              <span class="hero__floating-badge__title">নিরাপদ অর্ডার</span>
+              <span class="hero__floating-badge__sub">100% সুরক্ষিত</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       TRUST BAR (Marquee)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="trust-bar" aria-label="বিশ্বস্ততার সূচক">
+    <div class="trust-bar__inner">
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        ১০০% অরিজিনাল পণ্য
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="1" y="3" width="15" height="13"/>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+        সারাদেশে ডেলিভারি
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21.5 2v6h-6M2.5 22v-6h6"/>
+          <path d="M2 11.5a10 10 0 0118.8-4.3M22 12.5a10 10 0 01-18.8 4.2"/>
+        </svg>
+        সহজ রিটার্ন পলিসি
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07
+                   19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3
+                   a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09
+                   9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573
+                   2.81.7A2 2 0 0122 16.92z"/>
+        </svg>
+        24/7 কাস্টমার সাপোর্ট
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        সর্বোচ্চ ডিসকাউন্ট
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        ওয়ারেন্টি সহ পণ্য
+      </span>
+      <!-- Duplicate for seamless loop -->
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        ১০০% অরিজিনাল পণ্য
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="1" y="3" width="15" height="13"/>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+        সারাদেশে ডেলিভারি
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21.5 2v6h-6M2.5 22v-6h6"/>
+          <path d="M2 11.5a10 10 0 0118.8-4.3M22 12.5a10 10 0 01-18.8 4.2"/>
+        </svg>
+        সহজ রিটার্ন পলিসি
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07
+                   19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3
+                   a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09
+                   9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573
+                   2.81.7A2 2 0 0122 16.92z"/>
+        </svg>
+        24/7 কাস্টমার সাপোর্ট
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        সর্বোচ্চ ডিসকাউন্ট
+      </span>
+      <span class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        ওয়ারেন্টি সহ পণ্য
+      </span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       CATEGORIES
+  ═══════════════════════════════════════════════════════ -->
+  <section class="categories-section section" id="categories">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-header__tag">📁 ক্যাটাগরি</span>
+        <h2 class="section-header__title">আমাদের <span>ক্যাটাগরিসমূহ</span></h2>
+        <p class="section-header__desc">আপনার পছন্দের ক্যাটাগরি ব্রাউজ করুন</p>
+      </div>
+      <div class="categories-grid stagger-children" id="categories-grid">
+        <!-- JS থেকে dynamically load হবে -->
+        <div class="skeleton" style="height:120px;border-radius:var(--radius-lg)"></div>
+        <div class="skeleton" style="height:120px;border-radius:var(--radius-lg)"></div>
+        <div class="skeleton" style="height:120px;border-radius:var(--radius-lg)"></div>
+        <div class="skeleton" style="height:120px;border-radius:var(--radius-lg)"></div>
+        <div class="skeleton" style="height:120px;border-radius:var(--radius-lg)"></div>
+        <div class="skeleton" style="height:120px;border-radius:var(--radius-lg)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FEATURED PRODUCTS
+  ═══════════════════════════════════════════════════════ -->
+  <section class="products-section section" id="featured-products">
+    <div class="container">
+      <div class="products-section__header">
+        <div class="products-section__title-group">
+          <span class="products-section__tag">🔥 জনপ্রিয় পণ্য</span>
+          <h2 class="products-section__title">ফিচার্ড পণ্যসমূহ</h2>
+        </div>
+        <a href="search.html" class="btn btn--secondary btn--sm">
+          সব পণ্য দেখুন →
+        </a>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs" id="filter-tabs">
+        <button class="filter-tab active" data-filter="all">সব পণ্য</button>
+        <!-- JS থেকে category tabs dynamically যোগ হবে -->
+      </div>
+
+      <!-- Product Grid -->
+      <div class="products-grid stagger-children" id="products-grid">
+        <!-- JS থেকে dynamically load হবে -->
+      </div>
+
+      <!-- Load More -->
+      <div class="load-more-wrap" id="load-more-wrap" style="display:none">
+        <button class="btn btn--secondary btn--lg" id="load-more-btn">
+          আরো পণ্য দেখুন
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       STATS SECTION
+  ═══════════════════════════════════════════════════════ -->
+  <section class="stats-section section--sm" id="stats">
+    <div class="container">
+      <div class="stats-grid stagger-children" id="stats-grid">
+        <div class="stat-item animate-fade-up">
+          <div class="stat-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+          </div>
+          <span class="stat-item__value" id="stat-total-products">—</span>
+          <span class="stat-item__label">মোট পণ্য</span>
+        </div>
+        <div class="stat-item animate-fade-up">
+          <div class="stat-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <span class="stat-item__value" id="stat-customers">১০০+</span>
+          <span class="stat-item__label">সন্তুষ্ট ক্রেতা</span>
+        </div>
+        <div class="stat-item animate-fade-up">
+          <div class="stat-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <span class="stat-item__value" id="stat-deliveries">৫০০+</span>
+          <span class="stat-item__label">সফল ডেলিভারি</span>
+        </div>
+        <div class="stat-item animate-fade-up">
+          <div class="stat-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77
+                               5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <span class="stat-item__value">4.9★</span>
+          <span class="stat-item__label">গড় রেটিং</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       WHY CHOOSE US
+  ═══════════════════════════════════════════════════════ -->
+  <section class="features-section section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-header__tag">✨ কেন আমরা সেরা</span>
+        <h2 class="section-header__title">কেন <span>R BD SHOP</span> বেছে নেবেন?</h2>
+        <p class="section-header__desc">আমাদের সেবার মান সম্পর্কে জানুন</p>
+      </div>
+
+      <div class="features-grid stagger-children">
+        <div class="feature-card animate-fade-up">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">১০০% অরিজিনাল পণ্য</h3>
+          <p class="feature-card__desc">
+            আমরা শুধু অরিজিনাল ও মানসম্পন্ন পণ্য বিক্রি করি।
+            প্রতিটি পণ্যের গুণগত মান নিশ্চিত করা হয়।
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade-up">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">দ্রুত ডেলিভারি</h3>
+          <p class="feature-card__desc">
+            সারাদেশে দ্রুত ও নিরাপদ ডেলিভারি।
+            আপনার পণ্য সময়মতো পৌঁছে যাবে।
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade-up">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07
+                       19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3
+                       a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09
+                       9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573
+                       2.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">24/7 সাপোর্ট</h3>
+          <p class="feature-card__desc">
+            WhatsApp ও Telegram-এ যেকোনো সময়
+            যোগাযোগ করুন, আমরা সবসময় আছি আপনার পাশে।
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade-up">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">সাশ্রয়ী মূল্য</h3>
+          <p class="feature-card__desc">
+            বাজারের সেরা মূল্যে পণ্য কিনুন। নিয়মিত ডিসকাউন্ট ও অফার পান।
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade-up">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6"/>
+              <path d="M2 11.5a10 10 0 0118.8-4.3M22 12.5a10 10 0 01-18.8 4.2"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">সহজ রিটার্ন</h3>
+          <p class="feature-card__desc">
+            পণ্যে সমস্যা থাকলে সহজ রিটার্ন ও এক্সচেঞ্জ পলিসি রয়েছে।
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade-up">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">ওয়ারেন্টি সুবিধা</h3>
+          <p class="feature-card__desc">
+            প্রযোজ্য পণ্যে ওয়ারেন্টি সুবিধা রয়েছে।
+            নির্ভরযোগ্য ও বিশ্বস্ত শপিং অভিজ্ঞতা।
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       REVIEWS SECTION
+  ═══════════════════════════════════════════════════════ -->
+  <section class="reviews-section section" id="reviews">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-header__tag">⭐ গ্রাহকদের মতামত</span>
+        <h2 class="section-header__title">আমাদের ক্রেতারা <span>কী বলেন</span></h2>
+      </div>
+      <div class="reviews-grid stagger-children" id="reviews-grid">
+        <!-- JS থেকে dynamically load হবে -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SUPPORT SECTION
+  ═══════════════════════════════════════════════════════ -->
+  <section class="support-section" id="support">
+    <div class="container">
+      <div class="section-header" style="margin-bottom:var(--space-8)">
+        <span class="section-header__tag">💬 যোগাযোগ</span>
+        <h2 class="section-header__title">সরাসরি <span>যোগাযোগ</span> করুন</h2>
+      </div>
+      <div class="support-cards" id="support-cards">
+        <a href="#" class="support-card support-card--whatsapp" id="support-whatsapp"
+           target="_blank" rel="noopener">
+          <div class="support-card__icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15
+                       -.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463
+                       -2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606
+                       .134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371
+                       -.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51
+                       -.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016
+                       -1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487
+                       .709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719
+                       2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            </svg>
+          </div>
+          <div class="support-card__text">
+            <span class="support-card__title">WhatsApp</span>
+            <span class="support-card__sub">এখনই মেসেজ করুন</span>
+          </div>
+        </a>
+        <a href="#" class="support-card support-card--telegram" id="support-telegram"
+           target="_blank" rel="noopener">
+          <div class="support-card__icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12
+                       A12 12 0 0012 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506
+                       0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627
+                       -.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693
+                       -1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247
+                       -2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c
+                       -.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008
+                       -1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437
+                       .893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627
+                       4.476-1.635z"/>
+            </svg>
+          </div>
+          <div class="support-card__text">
+            <span class="support-card__title">Telegram</span>
+            <span class="support-card__sub">সরাসরি চ্যাট করুন</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       CTA SECTION
+  ═══════════════════════════════════════════════════════ -->
+  <section class="cta-section" id="cta">
+    <div class="container">
+      <div class="cta-section__inner">
+        <h2 class="cta-section__title">
+          আপনার পছন্দের পণ্য খুঁজে পান <span style="color:#60A5FA">R BD SHOP</span>-এ
+        </h2>
+        <p class="cta-section__desc">
+          এখনই আমাদের পণ্যসমূহ দেখুন এবং WhatsApp বা Telegram-এ অর্ডার করুন।
+        </p>
+        <div class="cta-section__actions">
+          <a href="search.html" class="hero__btn-primary">
+            🛒 পণ্য দেখুন
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#support" class="hero__btn-secondary">
+            💬 যোগাযোগ করুন
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="footer" id="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <!-- Brand Column -->
+        <div class="footer__brand">
+          <h3 class="footer__brand-name">R BD SHOP</h3>
+          <p class="footer__desc">
+            বাংলাদেশের সেরা ও বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম।
+            সেরা মানের পণ্য, সাশ্রয়ী মূল্য, এবং চমৎকার কাস্টমার সাপোর্ট।
+          </p>
+          <div class="footer__social" id="footer-social">
+            <!-- JS থেকে dynamic links আসবে -->
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="footer__col-title">দ্রুত লিংক</h4>
+          <ul class="footer__links">
+            <li><a href="index.html" class="footer__link">হোম</a></li>
+            <li><a href="search.html" class="footer__link">সব পণ্য</a></li>
+            <li><a href="category.html" class="footer__link">ক্যাটাগরি</a></li>
+            <li><a href="search.html" class="footer__link">সার্চ করুন</a></li>
+          </ul>
+        </div>
+
+        <!-- Support -->
+        <div>
+          <h4 class="footer__col-title">সাপোর্ট</h4>
+          <ul class="footer__links" id="footer-support-links">
+            <li><a href="#support" class="footer__link">যোগাযোগ করুন</a></li>
+            <li><a href="#" class="footer__link" id="footer-wa">WhatsApp</a></li>
+            <li><a href="#" class="footer__link" id="footer-tg">Telegram</a></li>
+          </ul>
+        </div>
+
+        <!-- Info -->
+        <div>
+          <h4 class="footer__col-title">তথ্য</h4>
+          <ul class="footer__links">
+            <li><a href="#features" class="footer__link">কেন আমরা?</a></li>
+            <li><a href="#reviews" class="footer__link">গ্রাহক মতামত</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copyright">
+          © <span id="footer-year">2024</span> R BD SHOP — সর্বস্বত্ব সংরক্ষিত।
+        </p>
+        <p class="footer__copyright" style="opacity:0.7">
+          ❤️ R BD SHOP
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══ BACK TO TOP ═══ -->
+  <button id="back-to-top" aria-label="উপরে যান" title="উপরে যান">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <!-- ═══ TOAST CONTAINER ═══ -->
+  <div id="toast-container"></div>
+
+  <!-- ═══ SCRIPTS (ES Modules) ═══ -->
+  <script type="module" src="js/home.js"></script>
+
+</body>
+    </html>
