@@ -1,0 +1,193 @@
+<!-- ============================================================
+   R BD SHOP — Category Page
+   Path: frontend/category.html
+   Description: Browse all categories or view products
+                within a specific category.
+   ============================================================ -->
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ক্যাটাগরি | R BD SHOP</title>
+  <meta name="description" content="R BD SHOP — আপনার পছন্দের ক্যাটাগরি ব্রাউজ করুন।" />
+  <link rel="canonical" href="" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="R BD SHOP" />
+  <meta property="og:title" content="ক্যাটাগরি | R BD SHOP" />
+  <meta property="og:description" content="R BD SHOP-এ আপনার পছন্দের ক্যাটাগরি দেখুন।" />
+  <meta property="og:image" content="assets/og-default.jpg" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+
+  <!-- FOUC Prevention -->
+  <script>
+    (function(){
+      try{
+        var s=localStorage.getItem('rbd-theme');
+        if(s==='dark'){document.documentElement.setAttribute('data-theme','dark')}
+        else if(!s){
+          if(window.matchMedia('(prefers-color-scheme:dark)').matches)
+            document.documentElement.setAttribute('data-theme','dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/header.css" />
+  <link rel="stylesheet" href="css/search.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body>
+
+  <!-- Page Loader -->
+  <div id="page-loader" aria-hidden="true">
+    <div class="loader-logo">
+      <span class="loader-logo__text">R BD SHOP</span>
+      <div class="loader-spinner"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div id="header-root"></div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       CATEGORY PAGE CONTENT
+  ═══════════════════════════════════════════════════════ -->
+  <main class="search-page" id="category-page">
+    <div class="container">
+
+      <!-- Breadcrumb -->
+      <nav class="product-breadcrumb" id="cat-breadcrumb" aria-label="পথ নির্দেশিকা"
+           style="margin-bottom:var(--space-5)">
+        <a href="index.html">হোম</a>
+        <span class="product-breadcrumb__sep">›</span>
+        <span id="breadcrumb-current" style="color:var(--txt-primary);font-weight:600">ক্যাটাগরি</span>
+      </nav>
+
+      <!-- ═══ VIEW 1: All Categories Grid (no ?cat= param) ═══ -->
+      <section id="all-categories-view">
+        <div class="section-header" style="margin-bottom:var(--space-8)">
+          <span class="section-header__tag">📁 ক্যাটাগরি</span>
+          <h1 class="section-header__title">আমাদের সব <span>ক্যাটাগরি</span></h1>
+          <p class="section-header__desc">আপনার পছন্দের ক্যাটাগরি বেছে নিন</p>
+        </div>
+
+        <div class="all-categories-grid stagger-children" id="all-categories-grid">
+          <!-- JS থেকে dynamic -->
+          <div class="skeleton" style="height:160px;border-radius:var(--radius-lg)"></div>
+          <div class="skeleton" style="height:160px;border-radius:var(--radius-lg)"></div>
+          <div class="skeleton" style="height:160px;border-radius:var(--radius-lg)"></div>
+          <div class="skeleton" style="height:160px;border-radius:var(--radius-lg)"></div>
+          <div class="skeleton" style="height:160px;border-radius:var(--radius-lg)"></div>
+          <div class="skeleton" style="height:160px;border-radius:var(--radius-lg)"></div>
+        </div>
+      </section>
+
+      <!-- ═══ VIEW 2: Single Category Products (has ?cat= param) ═══ -->
+      <section id="single-category-view" class="hidden">
+
+        <!-- Category Hero Banner -->
+        <div class="category-page__hero" id="category-hero">
+          <h1 class="category-page__hero-title" id="category-name">—</h1>
+          <p class="category-page__hero-count" id="category-count">— পণ্য</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="search-controls" style="margin-bottom:var(--space-6)">
+          <div class="search-controls__left">
+            <span class="search-controls__count" id="cat-result-count">
+              মোট <strong>—</strong> পণ্য
+            </span>
+          </div>
+          <div class="search-controls__right">
+            <select class="sort-select" id="cat-sort-select" aria-label="ক্রম পরিবর্তন">
+              <option value="newest">নতুন আগে</option>
+              <option value="oldest">পুরাতন আগে</option>
+              <option value="price-asc">মূল্য: কম → বেশি</option>
+              <option value="price-desc">মূল্য: বেশি → কম</option>
+              <option value="name-asc">নাম: A → Z</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid stagger-children" id="cat-products-grid">
+          <!-- JS থেকে dynamic -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="cat-pagination"></div>
+
+        <!-- Back link -->
+        <div style="text-align:center;margin-top:var(--space-8)">
+          <a href="category.html" class="btn btn--secondary">
+            ← সব ক্যাটাগরি দেখুন
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" id="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <h3 class="footer__brand-name">R BD SHOP</h3>
+          <p class="footer__desc">বাংলাদেশের সেরা ও বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম।</p>
+          <div class="footer__social" id="footer-social"></div>
+        </div>
+        <div>
+          <h4 class="footer__col-title">দ্রুত লিংক</h4>
+          <ul class="footer__links">
+            <li><a href="index.html" class="footer__link">হোম</a></li>
+            <li><a href="search.html" class="footer__link">সব পণ্য</a></li>
+            <li><a href="category.html" class="footer__link">ক্যাটাগরি</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">সাপোর্ট</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link" id="footer-wa">WhatsApp</a></li>
+            <li><a href="#" class="footer__link" id="footer-tg">Telegram</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">তথ্য</h4>
+          <ul class="footer__links">
+            <li><a href="index.html#features" class="footer__link">কেন আমরা?</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">© <span id="footer-year">2024</span> R BD SHOP — সর্বস্বত্ব সংরক্ষিত।</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="উপরে যান">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/category.js"></script>
+
+</body>
+  </html>
