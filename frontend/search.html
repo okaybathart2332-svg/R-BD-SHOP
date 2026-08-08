@@ -1,0 +1,270 @@
+<!-- ============================================================
+   R BD SHOP — Search & Products Page
+   Path: frontend/search.html
+   Description: All products browse, search results,
+                filters sidebar, sort, pagination.
+   ============================================================ -->
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>পণ্য খুঁজুন | R BD SHOP</title>
+  <meta name="description" content="R BD SHOP-এ আপনার পছন্দের পণ্য খুঁজুন। সেরা মূল্য, দ্রুত ডেলিভারি।" />
+  <link rel="canonical" href="" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="R BD SHOP" />
+  <meta property="og:title" content="পণ্য খুঁজুন | R BD SHOP" />
+  <meta property="og:description" content="R BD SHOP-এ সেরা পণ্য খুঁজুন।" />
+  <meta property="og:image" content="assets/og-default.jpg" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+
+  <!-- FOUC Prevention -->
+  <script>
+    (function(){
+      try{
+        var s=localStorage.getItem('rbd-theme');
+        if(s==='dark'){document.documentElement.setAttribute('data-theme','dark')}
+        else if(!s){
+          if(window.matchMedia('(prefers-color-scheme:dark)').matches)
+            document.documentElement.setAttribute('data-theme','dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/header.css" />
+  <link rel="stylesheet" href="css/search.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body>
+
+  <!-- Page Loader -->
+  <div id="page-loader" aria-hidden="true">
+    <div class="loader-logo">
+      <span class="loader-logo__text">R BD SHOP</span>
+      <div class="loader-spinner"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div id="header-root"></div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SEARCH PAGE
+  ═══════════════════════════════════════════════════════ -->
+  <main class="search-page">
+    <div class="container">
+
+      <!-- Page Header -->
+      <div class="search-page__header">
+        <h1 class="search-page__title" id="search-page-title">সব পণ্যসমূহ</h1>
+        <p class="search-page__subtitle" id="search-page-subtitle">
+          আমাদের সকল পণ্য দেখুন
+        </p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-page__bar" role="search">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="search"
+          id="search-input"
+          class="search-page__input"
+          placeholder="পণ্যের নাম, কোড, ক্যাটাগরি, ব্র্যান্ড..."
+          autocomplete="off"
+          aria-label="পণ্য সার্চ"
+        />
+        <button class="clear-btn hidden" id="search-clear" aria-label="সার্চ মুছুন">✕</button>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="search-controls">
+        <div class="search-controls__left">
+          <!-- Mobile Filter Toggle -->
+          <button class="filter-drawer-toggle" id="filter-drawer-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <line x1="4" y1="21" x2="4" y2="14"/>
+              <line x1="4" y1="10" x2="4" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12" y2="3"/>
+              <line x1="20" y1="21" x2="20" y2="16"/>
+              <line x1="20" y1="12" x2="20" y2="3"/>
+              <line x1="1" y1="14" x2="7" y2="14"/>
+              <line x1="9" y1="8" x2="15" y2="8"/>
+              <line x1="17" y1="16" x2="23" y2="16"/>
+            </svg>
+            ফিল্টার
+          </button>
+
+          <span class="search-controls__count" id="result-count">
+            মোট <strong>—</strong> পণ্য
+          </span>
+        </div>
+
+        <div class="search-controls__right">
+          <!-- Sort -->
+          <select class="sort-select" id="sort-select" aria-label="ক্রম পরিবর্তন">
+            <option value="newest">নতুন আগে</option>
+            <option value="oldest">পুরাতন আগে</option>
+            <option value="price-asc">মূল্য: কম → বেশি</option>
+            <option value="price-desc">মূল্য: বেশি → কম</option>
+            <option value="name-asc">নাম: A → Z</option>
+          </select>
+
+          <!-- View Toggle -->
+          <div class="view-toggle">
+            <button class="view-toggle__btn active" data-view="grid" aria-label="গ্রিড ভিউ">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+              </svg>
+            </button>
+            <button class="view-toggle__btn" data-view="list" aria-label="লিস্ট ভিউ">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Filters -->
+      <div class="active-filters hidden" id="active-filters"></div>
+
+      <!-- Layout: Sidebar + Content -->
+      <div class="search-page__layout">
+
+        <!-- SIDEBAR FILTERS -->
+        <aside class="search-page__filters" id="filters-sidebar">
+          <div class="filters__header">
+            <h3 class="filters__title">ফিল্টার</h3>
+            <button class="filters__clear" id="clear-all-filters">সব মুছুন</button>
+          </div>
+
+          <!-- Category Filter -->
+          <div class="filters__section">
+            <h4 class="filters__section-title">ক্যাটাগরি</h4>
+            <div class="filters__list" id="filter-categories">
+              <!-- JS থেকে dynamic -->
+              <div class="skeleton" style="height:18px;width:80%;margin-bottom:8px"></div>
+              <div class="skeleton" style="height:18px;width:70%;margin-bottom:8px"></div>
+              <div class="skeleton" style="height:18px;width:90%"></div>
+            </div>
+          </div>
+
+          <!-- Price Filter -->
+          <div class="filters__section">
+            <h4 class="filters__section-title">মূল্য পরিসীমা</h4>
+            <div class="filter-price-range">
+              <input type="number" id="filter-price-min" placeholder="সর্বনিম্ন" min="0" />
+              <span class="filter-price-range__sep">—</span>
+              <input type="number" id="filter-price-max" placeholder="সর্বোচ্চ" min="0" />
+            </div>
+            <button class="btn btn--primary btn--xs filters__apply-btn" id="filter-price-apply">
+              প্রয়োগ করুন
+            </button>
+          </div>
+
+          <!-- Stock Filter -->
+          <div class="filters__section">
+            <h4 class="filters__section-title">স্টক</h4>
+            <label class="filter-stock-toggle">
+              <input type="checkbox" id="filter-stock-only" />
+              <span>শুধু স্টকে আছে</span>
+            </label>
+          </div>
+        </aside>
+
+        <!-- Mobile Filter Overlay -->
+        <div class="filter-drawer-overlay" id="filter-drawer-overlay"></div>
+
+        <!-- CONTENT AREA -->
+        <div class="search-page__content">
+          <!-- Product Grid -->
+          <div class="products-grid stagger-children" id="products-grid">
+            <!-- JS থেকে dynamic -->
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination" id="pagination"></div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" id="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <h3 class="footer__brand-name">R BD SHOP</h3>
+          <p class="footer__desc">বাংলাদেশের সেরা ও বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম।</p>
+          <div class="footer__social" id="footer-social"></div>
+        </div>
+        <div>
+          <h4 class="footer__col-title">দ্রুত লিংক</h4>
+          <ul class="footer__links">
+            <li><a href="index.html" class="footer__link">হোম</a></li>
+            <li><a href="search.html" class="footer__link">সব পণ্য</a></li>
+            <li><a href="category.html" class="footer__link">ক্যাটাগরি</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">সাপোর্ট</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link" id="footer-wa">WhatsApp</a></li>
+            <li><a href="#" class="footer__link" id="footer-tg">Telegram</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">তথ্য</h4>
+          <ul class="footer__links">
+            <li><a href="index.html#features" class="footer__link">কেন আমরা?</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">© <span id="footer-year">2024</span> R BD SHOP — সর্বস্বত্ব সংরক্ষিত।</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="উপরে যান">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/search.js"></script>
+
+</body>
+                </html>
