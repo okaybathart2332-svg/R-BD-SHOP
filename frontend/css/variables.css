@@ -1,0 +1,261 @@
+/* ============================================================
+   R BD SHOP — CSS Variables
+   Path: frontend/css/variables.css
+   Description: Complete design token system for Light & Dark mode
+   ============================================================ */
+
+/* ── Google Fonts Import ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT MODE (Default)
+══════════════════════════════════════════════════════════════ */
+:root {
+  /* Primary Brand Colors */
+  --clr-primary:          #2563EB;
+  --clr-primary-dark:     #1D4ED8;
+  --clr-primary-light:    #3B82F6;
+  --clr-primary-xlight:   #DBEAFE;
+  --clr-primary-glow:     rgba(37, 99, 235, 0.18);
+  --clr-primary-shadow:   rgba(37, 99, 235, 0.30);
+
+  /* Background Layers */
+  --bg-root:              #F0F6FF;
+  --bg-primary:           #FFFFFF;
+  --bg-secondary:         #F8FAFF;
+  --bg-tertiary:          #EFF4FF;
+  --bg-card:              #FFFFFF;
+  --bg-card-hover:        #F5F9FF;
+  --bg-overlay:           rgba(15, 23, 42, 0.55);
+  --bg-glass:             rgba(255, 255, 255, 0.82);
+  --bg-glass-border:      rgba(37, 99, 235, 0.12);
+
+  /* Text Colors */
+  --txt-primary:          #0F172A;
+  --txt-secondary:        #334155;
+  --txt-muted:            #64748B;
+  --txt-placeholder:      #94A3B8;
+  --txt-inverse:          #FFFFFF;
+  --txt-link:             #2563EB;
+  --txt-link-hover:       #1D4ED8;
+
+  /* Border */
+  --border-primary:       #E2E8F0;
+  --border-secondary:     #CBD5E1;
+  --border-focus:         #2563EB;
+  --border-card:          rgba(37, 99, 235, 0.10);
+
+  /* Status Colors */
+  --clr-success:          #16A34A;
+  --clr-success-bg:       #F0FDF4;
+  --clr-success-border:   #BBF7D0;
+  --clr-warning:          #D97706;
+  --clr-warning-bg:       #FFFBEB;
+  --clr-warning-border:   #FDE68A;
+  --clr-danger:           #DC2626;
+  --clr-danger-bg:        #FEF2F2;
+  --clr-danger-border:    #FECACA;
+  --clr-info:             #0284C7;
+  --clr-info-bg:          #F0F9FF;
+  --clr-info-border:      #BAE6FD;
+
+  /* WhatsApp / Telegram */
+  --clr-whatsapp:         #25D366;
+  --clr-whatsapp-dark:    #128C7E;
+  --clr-telegram:         #229ED9;
+  --clr-telegram-dark:    #1A7DAB;
+
+  /* Shadows */
+  --shadow-xs:            0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-sm:            0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md:            0 4px 24px rgba(0, 0, 0, 0.10);
+  --shadow-lg:            0 8px 40px rgba(0, 0, 0, 0.12);
+  --shadow-xl:            0 16px 64px rgba(0, 0, 0, 0.14);
+  --shadow-primary:       0 4px 20px rgba(37, 99, 235, 0.28);
+  --shadow-primary-lg:    0 8px 32px rgba(37, 99, 235, 0.35);
+  --shadow-card:          0 2px 16px rgba(37, 99, 235, 0.06),
+                          0 1px 4px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover:    0 8px 32px rgba(37, 99, 235, 0.14),
+                          0 2px 8px rgba(0, 0, 0, 0.08);
+
+  /* Border Radius */
+  --radius-xs:            6px;
+  --radius-sm:            8px;
+  --radius:               12px;
+  --radius-md:            14px;
+  --radius-lg:            20px;
+  --radius-xl:            28px;
+  --radius-full:          9999px;
+
+  /* Spacing Scale */
+  --space-1:              4px;
+  --space-2:              8px;
+  --space-3:              12px;
+  --space-4:              16px;
+  --space-5:              20px;
+  --space-6:              24px;
+  --space-8:              32px;
+  --space-10:             40px;
+  --space-12:             48px;
+  --space-16:             64px;
+  --space-20:             80px;
+  --space-24:             96px;
+
+  /* Typography */
+  --font-family:          'Inter', -apple-system, BlinkMacSystemFont,
+                          'Segoe UI', sans-serif;
+  --font-size-xs:         0.75rem;    /* 12px */
+  --font-size-sm:         0.875rem;   /* 14px */
+  --font-size-base:       1rem;       /* 16px */
+  --font-size-md:         1.0625rem;  /* 17px */
+  --font-size-lg:         1.125rem;   /* 18px */
+  --font-size-xl:         1.25rem;    /* 20px */
+  --font-size-2xl:        1.5rem;     /* 24px */
+  --font-size-3xl:        1.875rem;   /* 30px */
+  --font-size-4xl:        2.25rem;    /* 36px */
+  --font-size-5xl:        3rem;       /* 48px */
+  --font-size-6xl:        3.75rem;    /* 60px */
+
+  --font-weight-light:    300;
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --font-weight-extrabold:800;
+  --font-weight-black:    900;
+
+  --line-height-tight:    1.2;
+  --line-height-snug:     1.375;
+  --line-height-normal:   1.5;
+  --line-height-relaxed:  1.625;
+  --line-height-loose:    2;
+
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide:  0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest:0.1em;
+
+  /* Transitions */
+  --transition-fast:      all 0.15s ease;
+  --transition:           all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:      all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce:    all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z-index Scale */
+  --z-below:              -1;
+  --z-base:               0;
+  --z-raised:             10;
+  --z-dropdown:           100;
+  --z-sticky:             200;
+  --z-overlay:            300;
+  --z-modal:              400;
+  --z-toast:              500;
+  --z-tooltip:            600;
+
+  /* Layout */
+  --container-max:        1280px;
+  --container-padding:    clamp(16px, 4vw, 32px);
+  --header-height:        72px;
+  --sidebar-width:        260px;
+
+  /* Header specific */
+  --header-bg:            rgba(255, 255, 255, 0.92);
+  --header-border:        rgba(37, 99, 235, 0.10);
+  --header-shadow:        0 2px 16px rgba(0, 0, 0, 0.07);
+
+  /* Input */
+  --input-bg:             #F8FAFF;
+  --input-border:         #E2E8F0;
+  --input-focus-border:   #2563EB;
+  --input-focus-shadow:   0 0 0 3px rgba(37, 99, 235, 0.15);
+  --input-radius:         10px;
+  --input-height:         46px;
+
+  /* Gradient */
+  --gradient-primary:     linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #1D4ED8 100%);
+  --gradient-hero:        linear-gradient(135deg, #0F172A 0%, #1E3A6E 50%, #0F172A 100%);
+  --gradient-card:        linear-gradient(145deg, #FFFFFF 0%, #F5F9FF 100%);
+  --gradient-shine:       linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DARK MODE
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] {
+  /* Background Layers */
+  --bg-root:              #060C1A;
+  --bg-primary:           #0A1020;
+  --bg-secondary:         #0D1526;
+  --bg-tertiary:          #111B32;
+  --bg-card:              #131C35;
+  --bg-card-hover:        #172040;
+  --bg-overlay:           rgba(0, 0, 0, 0.75);
+  --bg-glass:             rgba(13, 21, 38, 0.88);
+  --bg-glass-border:      rgba(37, 99, 235, 0.20);
+
+  /* Text Colors */
+  --txt-primary:          #F1F5F9;
+  --txt-secondary:        #CBD5E1;
+  --txt-muted:            #94A3B8;
+  --txt-placeholder:      #64748B;
+  --txt-inverse:          #0F172A;
+  --txt-link:             #60A5FA;
+  --txt-link-hover:       #93C5FD;
+
+  /* Border */
+  --border-primary:       #1E2D50;
+  --border-secondary:     #2A3F6A;
+  --border-focus:         #3B82F6;
+  --border-card:          rgba(37, 99, 235, 0.18);
+
+  /* Status Colors (Dark adjusted) */
+  --clr-success:          #4ADE80;
+  --clr-success-bg:       rgba(22, 163, 74, 0.12);
+  --clr-success-border:   rgba(74, 222, 128, 0.25);
+  --clr-warning:          #FBBF24;
+  --clr-warning-bg:       rgba(217, 119, 6, 0.12);
+  --clr-warning-border:   rgba(251, 191, 36, 0.25);
+  --clr-danger:           #F87171;
+  --clr-danger-bg:        rgba(220, 38, 38, 0.12);
+  --clr-danger-border:    rgba(248, 113, 113, 0.25);
+  --clr-info:             #38BDF8;
+  --clr-info-bg:          rgba(2, 132, 199, 0.12);
+  --clr-info-border:      rgba(56, 189, 248, 0.25);
+
+  /* Shadows (Dark) */
+  --shadow-xs:            0 1px 3px rgba(0, 0, 0, 0.30);
+  --shadow-sm:            0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md:            0 4px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg:            0 8px 40px rgba(0, 0, 0, 0.55);
+  --shadow-xl:            0 16px 64px rgba(0, 0, 0, 0.65);
+  --shadow-primary:       0 4px 20px rgba(37, 99, 235, 0.40);
+  --shadow-primary-lg:    0 8px 32px rgba(37, 99, 235, 0.50);
+  --shadow-card:          0 2px 16px rgba(0, 0, 0, 0.30),
+                          0 0 0 1px rgba(37, 99, 235, 0.08);
+  --shadow-card-hover:    0 8px 32px rgba(37, 99, 235, 0.20),
+                          0 0 0 1px rgba(37, 99, 235, 0.15);
+
+  /* Header */
+  --header-bg:            rgba(10, 16, 32, 0.94);
+  --header-border:        rgba(37, 99, 235, 0.15);
+  --header-shadow:        0 2px 24px rgba(0, 0, 0, 0.40);
+
+  /* Input */
+  --input-bg:             #111B32;
+  --input-border:         #1E2D50;
+  --input-focus-border:   #3B82F6;
+  --input-focus-shadow:   0 0 0 3px rgba(37, 99, 235, 0.20);
+
+  /* Gradient */
+  --gradient-hero:        linear-gradient(135deg, #020817 0%, #0F1E42 40%, #020817 100%);
+  --gradient-card:        linear-gradient(145deg, #131C35 0%, #0D1526 100%);
+  --gradient-shine:       linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+
+  /* Primary (slightly brighter in dark) */
+  --clr-primary:          #3B82F6;
+  --clr-primary-dark:     #2563EB;
+  --clr-primary-light:    #60A5FA;
+  --clr-primary-xlight:   rgba(37, 99, 235, 0.15);
+  --clr-primary-glow:     rgba(59, 130, 246, 0.22);
+  }
