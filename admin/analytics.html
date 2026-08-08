@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>অ্যানালিটিক্স | R BD SHOP Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="../frontend/assets/favicon.ico" type="image/x-icon" />
+  <script>(function(){try{var s=localStorage.getItem('rbd-theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');else if(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/admin-variables.css" />
+  <link rel="stylesheet" href="css/admin-base.css" />
+  <link rel="stylesheet" href="css/admin-layout.css" />
+  <link rel="stylesheet" href="css/admin-components.css" />
+  <link rel="stylesheet" href="css/admin-responsive.css" />
+</head>
+<body>
+  <div id="admin-page-loader"><div class="admin-loader-content"><span class="admin-loader-logo">R BD SHOP</span><div class="a-spinner a-spinner--lg"></div></div></div>
+  <div class="admin-wrapper">
+    <div id="sidebar-root"></div>
+    <main class="admin-main">
+      <div id="header-root"></div>
+      <div class="admin-content">
+        <div class="admin-page-header">
+          <div class="admin-page-header__left">
+            <h2 class="admin-page-header__title">অ্যানালিটিক্স</h2>
+            <p class="admin-page-header__desc">আপনার শপের পারফরম্যান্স দেখুন</p>
+          </div>
+        </div>
+        <div class="analytics-grid" id="analytics-grid">
+          <div class="chart-card" id="chart-orders"><div class="chart-card__header"><h3 class="chart-card__title">📊 অর্ডার ওভারভিউ</h3></div><div class="chart-card__body" id="chart-orders-body"><div class="a-spinner a-spinner--lg"></div></div></div>
+          <div class="chart-card" id="chart-stock"><div class="chart-card__header"><h3 class="chart-card__title">📦 স্টক ওভারভিউ</h3></div><div class="chart-card__body" id="chart-stock-body"><div class="a-spinner a-spinner--lg"></div></div></div>
+        </div>
+        <div class="a-card" style="margin-top:var(--a-space-5)">
+          <div class="a-card__header"><h3 class="a-card__title">🏆 শীর্ষ পণ্য (সর্বোচ্চ বিক্রি)</h3></div>
+          <div class="a-card__body" id="top-products"><div class="a-spinner"></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div id="admin-toast-container"></div>
+  <script type="module" src="js/analytics.js"></script>
+</body>
+</html>
