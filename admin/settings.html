@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>সেটিংস | R BD SHOP Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="../frontend/assets/favicon.ico" type="image/x-icon" />
+  <script>(function(){try{var s=localStorage.getItem('rbd-theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');else if(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/admin-variables.css" />
+  <link rel="stylesheet" href="css/admin-base.css" />
+  <link rel="stylesheet" href="css/admin-layout.css" />
+  <link rel="stylesheet" href="css/admin-components.css" />
+  <link rel="stylesheet" href="css/admin-responsive.css" />
+</head>
+<body>
+  <div id="admin-page-loader"><div class="admin-loader-content"><span class="admin-loader-logo">R BD SHOP</span><div class="a-spinner a-spinner--lg"></div></div></div>
+  <div class="admin-wrapper">
+    <div id="sidebar-root"></div>
+    <main class="admin-main">
+      <div id="header-root"></div>
+      <div class="admin-content">
+        <div class="admin-page-header">
+          <div class="admin-page-header__left">
+            <h2 class="admin-page-header__title">শপ সেটিংস</h2>
+            <p class="admin-page-header__desc">R BD SHOP এর সব কনফিগারেশন</p>
+          </div>
+          <div class="admin-page-header__actions">
+            <button class="a-btn a-btn--primary" id="btn-save-settings">💾 সেভ করুন</button>
+          </div>
+        </div>
+
+        <form id="settings-form" autocomplete="off">
+          <!-- Shop Info -->
+          <div class="a-card a-mb-6">
+            <div class="a-card__header"><h3 class="a-card__title">🏪 শপ তথ্য</h3></div>
+            <div class="a-card__body">
+              <div class="a-form-grid-2">
+                <div class="a-form-group"><label class="a-form-label">শপের নাম</label><input type="text" id="s-shop-name" value="R BD SHOP" /></div>
+                <div class="a-form-group"><label class="a-form-label">যোগাযোগ ইমেইল</label><input type="email" id="s-email" /></div>
+              </div>
+              <div class="a-form-group"><label class="a-form-label">ঠিকানা</label><textarea id="s-address" rows="2"></textarea></div>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="a-card a-mb-6">
+            <div class="a-card__header"><h3 class="a-card__title">📱 যোগাযোগ</h3></div>
+            <div class="a-card__body">
+              <div class="a-form-grid-2">
+                <div class="a-form-group"><label class="a-form-label a-form-label--required">WhatsApp নম্বর</label><input type="text" id="s-whatsapp" placeholder="880XXXXXXXXXX" /><span class="a-form-hint">+ চিহ্ন ছাড়া, শুধু সংখ্যা</span></div>
+                <div class="a-form-group"><label class="a-form-label">Telegram Username</label><input type="text" id="s-telegram-user" placeholder="@username" /></div>
+              </div>
+              <div class="a-form-group"><label class="a-form-label">Telegram লিংক</label><input type="url" id="s-telegram-link" placeholder="https://t.me/username" /></div>
+              <div class="a-form-group"><label class="a-form-label">Support WhatsApp</label><input type="text" id="s-support-wa" placeholder="880XXXXXXXXXX" /></div>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <div class="a-card a-mb-6">
+            <div class="a-card__header"><h3 class="a-card__title">🔗 সোশ্যাল লিংক</h3></div>
+            <div class="a-card__body">
+              <div class="a-form-grid-2">
+                <div class="a-form-group"><label class="a-form-label">Facebook Page</label><input type="url" id="s-facebook" placeholder="https://facebook.com/..." /></div>
+                <div class="a-form-group"><label class="a-form-label">YouTube Channel</label><input type="url" id="s-youtube" placeholder="https://youtube.com/..." /></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delivery -->
+          <div class="a-card a-mb-6">
+            <div class="a-card__header"><h3 class="a-card__title">🚚 ডেলিভারি তথ্য</h3></div>
+            <div class="a-card__body">
+              <div class="a-form-group"><label class="a-form-label">ডেলিভারি তথ্য</label><textarea id="s-delivery" rows="3" placeholder="ডেলিভারি সংক্রান্ত তথ্য..."></textarea></div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+  <div id="admin-toast-container"></div>
+  <script type="module" src="js/settings.js"></script>
+</body>
+              </html>
