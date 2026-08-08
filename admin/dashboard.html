@@ -1,0 +1,158 @@
+<!-- ============================================================
+   R BD SHOP — Admin Dashboard
+   Path: admin/dashboard.html
+   ============================================================ -->
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ড্যাশবোর্ড | R BD SHOP Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="../frontend/assets/favicon.ico" type="image/x-icon" />
+
+  <script>
+    (function(){try{var s=localStorage.getItem('rbd-theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');else if(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();
+  </script>
+
+  <link rel="stylesheet" href="css/admin-variables.css" />
+  <link rel="stylesheet" href="css/admin-base.css" />
+  <link rel="stylesheet" href="css/admin-layout.css" />
+  <link rel="stylesheet" href="css/admin-components.css" />
+  <link rel="stylesheet" href="css/admin-responsive.css" />
+</head>
+
+<body>
+
+  <!-- Page Loader -->
+  <div id="admin-page-loader">
+    <div class="admin-loader-content">
+      <span class="admin-loader-logo">R BD SHOP</span>
+      <div class="a-spinner a-spinner--lg"></div>
+    </div>
+  </div>
+
+  <div class="admin-wrapper">
+    <!-- Sidebar (JS inject) -->
+    <div id="sidebar-root"></div>
+
+    <!-- Main -->
+    <main class="admin-main">
+      <!-- Header (JS inject) -->
+      <div id="header-root"></div>
+
+      <!-- Content -->
+      <div class="admin-content">
+
+        <!-- Page Header -->
+        <div class="admin-page-header">
+          <div class="admin-page-header__left">
+            <h2 class="admin-page-header__title">ড্যাশবোর্ড</h2>
+            <p class="admin-page-header__desc">R BD SHOP এর সামগ্রিক পরিসংখ্যান</p>
+          </div>
+          <div class="admin-page-header__actions">
+            <a href="add-product.html" class="a-btn a-btn--primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              পণ্য যোগ করুন
+            </a>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="admin-stats-grid" id="stats-grid">
+          <!-- JS থেকে dynamic -->
+          <div class="admin-stat-card"><div style="padding:var(--a-space-8);text-align:center;width:100%"><div class="a-spinner"></div></div></div>
+          <div class="admin-stat-card"><div style="padding:var(--a-space-8);text-align:center;width:100%"><div class="a-spinner"></div></div></div>
+          <div class="admin-stat-card"><div style="padding:var(--a-space-8);text-align:center;width:100%"><div class="a-spinner"></div></div></div>
+          <div class="admin-stat-card"><div style="padding:var(--a-space-8);text-align:center;width:100%"><div class="a-spinner"></div></div></div>
+        </div>
+
+        <!-- Quick Actions -->
+        <h3 style="font-size:var(--a-font-md);font-weight:700;color:var(--a-text-primary);margin-bottom:var(--a-space-4)">দ্রুত কাজ</h3>
+        <div class="quick-actions-grid">
+          <a href="add-product.html" class="quick-action-card">
+            <div class="quick-action-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+              </svg>
+            </div>
+            <span class="quick-action-card__title">পণ্য যোগ</span>
+          </a>
+          <a href="orders.html" class="quick-action-card">
+            <div class="quick-action-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <span class="quick-action-card__title">অর্ডার দেখুন</span>
+          </a>
+          <a href="categories.html" class="quick-action-card">
+            <div class="quick-action-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+              </svg>
+            </div>
+            <span class="quick-action-card__title">ক্যাটাগরি</span>
+          </a>
+          <a href="inventory.html" class="quick-action-card">
+            <div class="quick-action-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+              </svg>
+            </div>
+            <span class="quick-action-card__title">ইনভেন্টরি</span>
+          </a>
+          <a href="settings.html" class="quick-action-card">
+            <div class="quick-action-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15 1.65 1.65 0 003.13 14H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 010 4h-.09c-.658.003-1.25.396-1.51 1z"/>
+              </svg>
+            </div>
+            <span class="quick-action-card__title">সেটিংস</span>
+          </a>
+        </div>
+
+        <!-- Two Column Layout: Extended Stats + Recent Activity -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--a-space-5);margin-top:var(--a-space-2)">
+
+          <!-- Extended Stats -->
+          <div class="a-card">
+            <div class="a-card__header">
+              <h3 class="a-card__title">বিস্তারিত পরিসংখ্যান</h3>
+            </div>
+            <div class="a-card__body" id="extended-stats">
+              <div class="a-flex-center" style="padding:var(--a-space-8)">
+                <div class="a-spinner"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="a-card">
+            <div class="a-card__header">
+              <h3 class="a-card__title">সাম্প্রতিক কার্যকলাপ</h3>
+            </div>
+            <div class="a-card__body" id="recent-activity">
+              <div class="a-flex-center" style="padding:var(--a-space-8)">
+                <div class="a-spinner"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div id="admin-toast-container"></div>
+
+  <script type="module" src="js/dashboard.js"></script>
+
+</body>
+              </html>
