@@ -1,12 +1,12 @@
 /* ============================================================
-   R BD SHOP — Add Product (ImgBB Version)
+   R BD SHOP — Add Product (ImgBB + Fixed Category)
    Path: admin/js/add-product.js
    ============================================================ */
 
 import { db, uploadToImgBB } from './firebase-config.js';
 import {
   collection, addDoc, getDocs, query,
-  where, orderBy, serverTimestamp, doc, updateDoc, increment
+  orderBy, serverTimestamp, doc, updateDoc, increment, where
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 import { requireAdmin, adminLogout } from './admin-auth.js';
@@ -42,21 +42,52 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+/* ─── LOAD CATEGORIES (Fixed) ─── */
 async function loadCategories() {
   const select = aqs('#p-category');
-  if (!select) return;
+  if (!select) {
+    console.error('[AddProduct] Category select not found');
+    return;
+  }
+
   try {
-    const snap = await getDocs(query(collection(db, 'categories'), where('status', '==', 'active'), orderBy('name')));
+    // ✅ FIX: Load ALL categories, filter client-side
+    // (কারণ কিছু পুরানো category-তে status field নাও থাকতে পারে)
+    const snap = await getDocs(query(collection(db, 'categories'), orderBy('name')));
+
+    console.log('[AddProduct] Categories loaded:', snap.size);
+
+    if (snap.empty) {
+      adminShowToast('কোনো ক্যাটাগরি নেই। প্রথমে ক্যাটাগরি যোগ করুন।', 'warning');
+      return;
+    }
+
+    let addedCount = 0;
     snap.forEach((d) => {
       const cat = d.data();
-      const opt = document.createElement('option');
-      opt.value = cat.name;
-      opt.textContent = cat.name;
-      select.appendChild(opt);
+      // Show if active OR status not set (default active)
+      if (!cat.status || cat.status === 'active') {
+        const opt = document.createElement('option');
+        opt.value = cat.name;
+        opt.textContent = cat.name;
+        select.appendChild(opt);
+        addedCount++;
+      }
     });
-  } catch { /* ignore */ }
+
+    console.log('[AddProduct] Categories added to dropdown:', addedCount);
+
+    if (addedCount === 0) {
+      adminShowToast('সব ক্যাটাগরি নিষ্ক্রিয়। সক্রিয় করুন।', 'warning');
+    }
+
+  } catch (err) {
+    console.error('[AddProduct] Category load error:', err);
+    adminShowToast('ক্যাটাগরি লোড ব্যর্থ: ' + err.message, 'error');
+  }
 }
 
+/* ─── IMAGE UPLOAD ─── */
 function setupImageUpload() {
   const mainArea = aqs('#main-image-upload');
   const mainInput = aqs('#main-image-file');
@@ -122,6 +153,7 @@ function setupImageUpload() {
   }
 }
 
+/* ─── TAGS ─── */
 function setupTagsInput()     { setupGenericTags('tag-text-input', 'tags-input', tags); }
 function setupFeaturesInput() { setupGenericTags('feature-text-input', 'features-input', features); }
 
@@ -158,6 +190,7 @@ function setupGenericTags(inputId, containerId, array) {
   }
 }
 
+/* ─── SPECS ─── */
 function setupSpecsRows() {
   aqs('#add-spec-row')?.addEventListener('click', () => {
     const list = aqs('#specs-list');
@@ -176,6 +209,7 @@ function setupSpecsRows() {
   });
 }
 
+/* ─── FORM SUBMIT ─── */
 function setupFormSubmit() {
   const form = aqs('#product-form');
   const draftBtn = aqs('#btn-draft');
@@ -208,14 +242,12 @@ async function saveProduct() {
     const productCode = aqs('#p-code').value || generateProductCode();
     const slug = createAdminSlug(name) || `product-${Date.now()}`;
 
-    // Upload main image to ImgBB
     let mainImageURL = '';
     if (mainImageFile) {
       adminShowToast('প্রধান ছবি upload হচ্ছে...', 'info');
       mainImageURL = await uploadToImgBB(mainImageFile);
     }
 
-    // Upload gallery images to ImgBB
     const galleryURLs = [];
     for (let i = 0; i < galleryFiles.length; i++) {
       adminShowToast(`গ্যালারি ছবি ${i + 1} upload হচ্ছে...`, 'info');
@@ -223,7 +255,6 @@ async function saveProduct() {
       galleryURLs.push(url);
     }
 
-    // Specifications
     const specs = {};
     document.querySelectorAll('#specs-list .key-value-row').forEach((row) => {
       const inputs = row.querySelectorAll('input');
@@ -273,4 +304,4 @@ async function saveProduct() {
     adminShowToast('সেভ ব্যর্থ: ' + err.message, 'error');
     setBtnLoading(btn, false, '🚀 পাবলিশ করুন');
   }
-   }
+               }
