@@ -1,0 +1,139 @@
+<!-- ============================================================
+   R BD SHOP — Edit Product Page
+   Path: admin/edit-product.html
+   ============================================================ -->
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>পণ্য এডিট | R BD SHOP Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="../frontend/assets/favicon.ico" type="image/x-icon" />
+  <script>(function(){try{var s=localStorage.getItem('rbd-theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');else if(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/admin-variables.css" />
+  <link rel="stylesheet" href="css/admin-base.css" />
+  <link rel="stylesheet" href="css/admin-layout.css" />
+  <link rel="stylesheet" href="css/admin-components.css" />
+  <link rel="stylesheet" href="css/admin-responsive.css" />
+</head>
+<body>
+
+  <div id="admin-page-loader"><div class="admin-loader-content"><span class="admin-loader-logo">R BD SHOP</span><div class="a-spinner a-spinner--lg"></div></div></div>
+
+  <div class="admin-wrapper">
+    <div id="sidebar-root"></div>
+    <main class="admin-main">
+      <div id="header-root"></div>
+      <div class="admin-content">
+
+        <div class="admin-page-header">
+          <div class="admin-page-header__left">
+            <h2 class="admin-page-header__title">পণ্য এডিট করুন</h2>
+            <p class="admin-page-header__desc" id="edit-product-name">লোড হচ্ছে...</p>
+          </div>
+          <div class="admin-page-header__actions">
+            <a href="products.html" class="a-btn a-btn--ghost">← তালিকায় ফিরুন</a>
+          </div>
+        </div>
+
+        <!-- Same form structure as add-product but pre-filled -->
+        <form id="product-form" autocomplete="off">
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:var(--a-space-5);align-items:start">
+            <div>
+              <div class="a-card a-mb-6">
+                <div class="a-card__header"><h3 class="a-card__title">📦 মৌলিক তথ্য</h3></div>
+                <div class="a-card__body">
+                  <div class="a-form-group">
+                    <label class="a-form-label a-form-label--required">পণ্যের নাম</label>
+                    <input type="text" id="p-name" required />
+                  </div>
+                  <div class="a-form-grid-2">
+                    <div class="a-form-group"><label class="a-form-label">পণ্য কোড</label><input type="text" id="p-code" readonly /></div>
+                    <div class="a-form-group"><label class="a-form-label">ব্র্যান্ড</label><input type="text" id="p-brand" /></div>
+                  </div>
+                  <div class="a-form-group"><label class="a-form-label">সংক্ষিপ্ত বিবরণ</label><textarea id="p-short-desc" rows="2"></textarea></div>
+                  <div class="a-form-group"><label class="a-form-label">পূর্ণ বিবরণ</label><textarea id="p-full-desc" rows="6"></textarea></div>
+                </div>
+              </div>
+              <div class="a-card a-mb-6">
+                <div class="a-card__header"><h3 class="a-card__title">💰 মূল্য ও স্টক</h3></div>
+                <div class="a-card__body">
+                  <div class="a-form-grid-3">
+                    <div class="a-form-group"><label class="a-form-label a-form-label--required">বিক্রয় মূল্য (৳)</label><input type="number" id="p-price" min="0" required /></div>
+                    <div class="a-form-group"><label class="a-form-label">পূর্বের মূল্য (৳)</label><input type="number" id="p-old-price" min="0" /></div>
+                    <div class="a-form-group"><label class="a-form-label">ডিসকাউন্ট (%)</label><input type="number" id="p-discount" min="0" max="100" /></div>
+                  </div>
+                  <div class="a-form-grid-2">
+                    <div class="a-form-group"><label class="a-form-label a-form-label--required">স্টক পরিমাণ</label><input type="number" id="p-stock" min="0" required /></div>
+                    <div class="a-form-group"><label class="a-form-label">ওয়ারেন্টি তথ্য</label><input type="text" id="p-warranty" /></div>
+                  </div>
+                </div>
+              </div>
+              <div class="a-card a-mb-6">
+                <div class="a-card__header"><h3 class="a-card__title">✨ বৈশিষ্ট্য ও স্পেসিফিকেশন</h3></div>
+                <div class="a-card__body">
+                  <div class="a-form-group">
+                    <label class="a-form-label">বৈশিষ্ট্যসমূহ</label>
+                    <div class="tags-input" id="features-input"><input type="text" class="tags-input__input" placeholder="Enter চাপুন" id="feature-text-input" /></div>
+                  </div>
+                  <div class="a-form-group">
+                    <label class="a-form-label">স্পেসিফিকেশন</label>
+                    <div class="key-value-list" id="specs-list"></div>
+                    <button type="button" class="a-btn a-btn--ghost a-btn--xs a-mt-4" id="add-spec-row">+ যোগ করুন</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="a-card a-mb-6">
+                <div class="a-card__header"><h3 class="a-card__title">⚙️ স্ট্যাটাস</h3></div>
+                <div class="a-card__body">
+                  <div class="a-form-group"><label class="a-form-label">স্ট্যাটাস</label>
+                    <select id="p-status"><option value="draft">ড্রাফট</option><option value="published">পাবলিশড</option><option value="hidden">লুকানো</option><option value="outofstock">স্টক শেষ</option></select>
+                  </div>
+                  <div class="a-form-group"><label class="a-form-label a-form-label--required">ক্যাটাগরি</label><select id="p-category" required><option value="">নির্বাচন করুন</option></select></div>
+                  <div class="a-form-group"><label class="a-form-label">ট্যাগ</label><div class="tags-input" id="tags-input"><input type="text" class="tags-input__input" placeholder="Enter চাপুন" id="tag-text-input" /></div></div>
+                </div>
+              </div>
+              <div class="a-card a-mb-6">
+                <div class="a-card__header"><h3 class="a-card__title">📷 ছবি</h3></div>
+                <div class="a-card__body">
+                  <div class="a-form-group">
+                    <label class="a-form-label">প্রধান ছবি</label>
+                    <div class="image-upload-area" id="main-image-upload"><p class="image-upload-area__text">নতুন ছবি আপলোড করুন</p></div>
+                    <input type="file" id="main-image-file" accept="image/*" class="a-hidden" />
+                    <div class="image-preview-grid" id="main-image-preview"></div>
+                  </div>
+                  <div class="a-form-group">
+                    <label class="a-form-label">গ্যালারি ছবি</label>
+                    <div class="image-upload-area" id="gallery-image-upload"><p class="image-upload-area__text">গ্যালারি ছবি আপলোড</p></div>
+                    <input type="file" id="gallery-image-file" accept="image/*" multiple class="a-hidden" />
+                    <div class="image-preview-grid" id="gallery-image-preview"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="a-card a-mb-6">
+                <div class="a-card__header"><h3 class="a-card__title">📱 অর্ডার অপশন</h3></div>
+                <div class="a-card__body">
+                  <div class="a-flex-between a-mb-4"><span class="a-form-label">WhatsApp</span><label class="toggle-switch"><input type="checkbox" id="p-whatsapp" checked /><span class="toggle-switch__slider"></span></label></div>
+                  <div class="a-flex-between"><span class="a-form-label">Telegram</span><label class="toggle-switch"><input type="checkbox" id="p-telegram" checked /><span class="toggle-switch__slider"></span></label></div>
+                </div>
+              </div>
+              <div class="a-card">
+                <div class="a-card__body" style="display:flex;flex-direction:column;gap:var(--a-space-3)">
+                  <button type="submit" class="a-btn a-btn--primary a-btn--full a-btn--lg" id="btn-update">💾 আপডেট করুন</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </main>
+  </div>
+
+  <div id="admin-toast-container"></div>
+  <script type="module" src="js/edit-product.js"></script>
+</body>
+  </html>
