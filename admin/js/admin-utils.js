@@ -4,6 +4,11 @@
    Description: Reusable helpers used across admin panel —
                 toast, confirm dialog, formatting, DOM,
                 sidebar management, theme toggle.
+
+   ✅ FIXED: adminConfirm() ছিল Escape-key listener leak —
+      আগে OK/Cancel ক্লিক করলে keydown listener কখনো সরানো হতো না,
+      বারবার confirm dialog খুললে stale listener জমতো।
+      এখন cleanup() সবসময় listener remove করে, যেভাবেই dialog বন্ধ হোক।
    ============================================================ */
 
 /* ══════════════════════════════════════════════════════════════
@@ -100,8 +105,14 @@ export function adminConfirm({
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
 
+    // ✅ FIX: escHandler কে বাইরে define করা হয়েছে যাতে cleanup() থেকে
+    // সবসময় removeEventListener করা যায় — OK/Cancel/overlay-click/Escape,
+    // যেভাবেই বন্ধ হোক না কেন, listener leak হবে না।
+    let escHandler;
+
     const cleanup = () => {
       document.body.style.overflow = '';
+      document.removeEventListener('keydown', escHandler);
       overlay.remove();
     };
 
@@ -122,13 +133,13 @@ export function adminConfirm({
       }
     });
 
-    document.addEventListener('keydown', function escHandler(e) {
+    escHandler = (e) => {
       if (e.key === 'Escape') {
         cleanup();
         resolve(false);
-        document.removeEventListener('keydown', escHandler);
       }
-    });
+    };
+    document.addEventListener('keydown', escHandler);
   });
 }
 
@@ -721,4 +732,4 @@ export function buildAdminHeaderHTML(pageTitle = 'ড্যাশবোর্ড
       </div>
     </div>
   </header>`;
-}
+       }
