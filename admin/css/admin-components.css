@@ -4,6 +4,11 @@
    Description: Specialized admin UI — order cards, inventory,
                 analytics charts, reviews, settings forms,
                 file upload, status selectors, customer cards.
+
+   ✅ FIXED: অর্ডার পেজের status dropdown-এ কোনো কালার রুল ছিল না
+   (শুধু product status-এর জন্য রুল ছিল)। orders.js এখন
+   "order-status-select" নামে আলাদা ক্লাস ব্যবহার করে — নিচে তার
+   জন্য নতুন কালার রুল যোগ করা হয়েছে (ফাইলের একদম শেষে)।
    ============================================================ */
 
 /* ══════════════════════════════════════════════════════════════
@@ -1062,6 +1067,56 @@
 }
 
 .product-status-select[data-status="outofstock"] {
+  border-color: var(--a-danger-border);
+  color: var(--a-danger);
+  background-color: var(--a-danger-bg);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ✅ NEW: ORDER STATUS DROPDOWN (orders.js)
+   আগে এই dropdown-এ কোনো কালার রুলই ছিল না — এখন যোগ করা হলো।
+══════════════════════════════════════════════════════════════ */
+.order-status-select {
+  height: 36px;
+  font-size: var(--a-font-sm);
+  font-weight: 600;
+  border-radius: var(--a-radius-sm);
+  padding-left: var(--a-space-3);
+  padding-right: 36px;
+  transition: var(--a-transition-fast);
+}
+
+.order-status-select[data-status="pending"] {
+  border-color: var(--a-warning-border);
+  color: var(--a-warning);
+  background-color: var(--a-warning-bg);
+}
+
+.order-status-select[data-status="confirmed"] {
+  border-color: var(--a-info-border);
+  color: var(--a-info);
+  background-color: var(--a-info-bg);
+}
+
+.order-status-select[data-status="processing"] {
+  border-color: var(--a-primary);
+  color: var(--a-primary);
+  background-color: var(--a-primary-glow);
+}
+
+.order-status-select[data-status="shipped"] {
+  border-color: #7C3AED;
+  color: #7C3AED;
+  background-color: rgba(124, 58, 237, 0.10);
+}
+
+.order-status-select[data-status="delivered"] {
+  border-color: var(--a-success-border);
+  color: var(--a-success);
+  background-color: var(--a-success-bg);
+}
+
+.order-status-select[data-status="cancelled"] {
   border-color: var(--a-danger-border);
   color: var(--a-danger);
   background-color: var(--a-danger-bg);
