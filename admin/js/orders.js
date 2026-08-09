@@ -1,6 +1,15 @@
 /* ============================================================
    R BD SHOP — Orders Management
    Path: admin/js/orders.js
+
+   ✅ FIXED: অর্ডার স্ট্যাটাস dropdown কালার কোডেড হতো না।
+   কারণ: এটা product-status-select ক্লাস ব্যবহার করতো, কিন্তু CSS-এ
+   শুধু product status (published/draft ইত্যাদি) এর কালার রুল ছিল,
+   order status (pending/confirmed ইত্যাদি) এর কোনো রুল ছিল না।
+   এখন আলাদা "order-status-select" ক্লাস যোগ করা হয়েছে এবং
+   admin-components.css-এ এর জন্য কালার রুল যোগ করা হয়েছে।
+   এছাড়া status পরিবর্তন করলে এখন dropdown-এর data-status attribute-ও
+   সাথে সাথে আপডেট হয় — আগে পেজ রিলোড ছাড়া নতুন কালার দেখা যেত না।
    ============================================================ */
 
 import { db } from './firebase-config.js';
@@ -122,7 +131,7 @@ function renderTable() {
       <td><strong>${formatAdminPrice(o.totalPrice || 0)}</strong></td>
       <td><span class="a-badge a-badge--neutral">${escapeAdminHtml(o.source || '—')}</span></td>
       <td>
-        <select class="product-status-select" data-order-id="${o.id}" data-status="${o.status}" style="height:30px;font-size:var(--a-font-xs);min-width:110px">
+        <select class="order-status-select" data-order-id="${o.id}" data-status="${o.status}" style="height:30px;font-size:var(--a-font-xs);min-width:110px">
           <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>পেন্ডিং</option>
           <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>কনফার্মড</option>
           <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>প্রসেসিং</option>
@@ -144,13 +153,21 @@ function renderTable() {
   // Status change
   tbody.querySelectorAll('[data-order-id]').forEach((sel) => {
     sel.addEventListener('change', async () => {
+      const newStatus = sel.value;
       try {
-        await updateDoc(doc(db, 'orders', sel.dataset.orderId), { status: sel.value, updatedAt: serverTimestamp() });
+        await updateDoc(doc(db, 'orders', sel.dataset.orderId), { status: newStatus, updatedAt: serverTimestamp() });
         const idx = allOrders.findIndex((o) => o.id === sel.dataset.orderId);
-        if (idx !== -1) allOrders[idx].status = sel.value;
+        if (idx !== -1) allOrders[idx].status = newStatus;
+
+        // ✅ FIX: dropdown-এর data-status সাথে সাথে আপডেট করো,
+        // যাতে নতুন কালার তৎক্ষণাৎ দেখা যায় (পেজ রিলোড ছাড়াই)
+        sel.dataset.status = newStatus;
+
         adminShowToast('স্ট্যাটাস আপডেট হয়েছে', 'success');
         loadOrderStats();
-      } catch { adminShowToast('আপডেট ব্যর্থ', 'error'); }
+      } catch {
+        adminShowToast('আপডেট ব্যর্থ', 'error');
+      }
     });
   });
 
@@ -293,4 +310,4 @@ function showOrderModal() {
       adminShowToast('সেভ ব্যর্থ: ' + err.message, 'error');
     }
   });
-               }
+   }
