@@ -1,6 +1,14 @@
 /* ============================================================
    R BD SHOP — Add Product (ImgBB + Fixed Category)
    Path: admin/js/add-product.js
+
+   ✅ FIXED (৩টি বাগ):
+   1. Tag/Feature ইনপুটে Enter চাপার পর ফোকাস হারাতো — এখন input
+      element কখনো destroy হয় না, তাই ফোকাস স্বাভাবিকভাবেই থাকে।
+   2. Discount ফিল্ডে "0" লিখলেও পুরনো দাম বেশি থাকলে auto-calculate
+      হয়ে যেত (falsy 0 বাগ) — এখন ফাঁকা vs "0" আলাদা করে চেক হয়।
+   3. স্টক ০ দিয়ে status "published" রাখলে auto "outofstock" হতো না —
+      এখন edit-product.js-এর মতোই এখানে যোগ করা হয়েছে।
    ============================================================ */
 
 import { db, uploadToImgBB } from './firebase-config.js';
@@ -153,41 +161,69 @@ function setupImageUpload() {
   }
 }
 
-/* ─── TAGS ─── */
+/* ─── TAGS ───────────────────────────────────────────────────
+   ✅ FIX: আগে প্রতিটা tag যোগ হলে গোটা container.innerHTML রিসেট
+   হতো — এতে <input> element ধ্বংস হয়ে নতুন একটা বসতো, ফলে ফোকাস
+   হারিয়ে যেত এবং প্রতিবার আবার ক্লিক করে টাইপ করতে হতো।
+
+   এখন input element-টা কখনো destroy করা হয় না — শুধু পুরনো ট্যাগ
+   span-গুলো সরিয়ে নতুন span-গুলো input-এর ঠিক আগে বসানো হয়। input
+   একই DOM node থাকায় ব্রাউজার ফোকাস নিজে থেকেই বজায় রাখে।
+──────────────────────────────────────────────────────────── */
 function setupTagsInput()     { setupGenericTags('tag-text-input', 'tags-input', tags); }
 function setupFeaturesInput() { setupGenericTags('feature-text-input', 'features-input', features); }
 
 function setupGenericTags(inputId, containerId, array) {
-  const input = aqs(`#${inputId}`);
   const container = aqs(`#${containerId}`);
-  if (!input || !container) return;
-
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const val = input.value.trim();
-      if (val && !array.includes(val)) {
-        array.push(val);
-        renderTags();
-      }
-      input.value = '';
-    }
-  });
+  if (!container) return;
 
   function renderTags() {
+    const input = aqs(`#${inputId}`);
+
     const tagsHtml = array.map((t, i) => `
       <span class="tags-input__tag">${escapeAdminHtml(t)}
         <button type="button" class="tags-input__tag-remove" data-tag-idx="${i}">✕</button>
       </span>`).join('');
-    container.innerHTML = tagsHtml + `<input type="text" class="tags-input__input" id="${inputId}" placeholder="Enter চাপুন" />`;
+
+    // পুরনো ট্যাগ span-গুলো সরাও (input বাদে)
+    container.querySelectorAll('.tags-input__tag').forEach((el) => el.remove());
+
+    if (input) {
+      // input-কে destroy না করেই তার আগে নতুন ট্যাগ span বসাও
+      input.insertAdjacentHTML('beforebegin', tagsHtml);
+    } else {
+      // input না থাকলে (প্রথমবার) পুরো তৈরি করো
+      container.innerHTML = tagsHtml + `<input type="text" class="tags-input__input" id="${inputId}" placeholder="Enter চাপুন" />`;
+    }
+
     container.querySelectorAll('[data-tag-idx]').forEach((btn) => {
       btn.addEventListener('click', () => {
         array.splice(parseInt(btn.dataset.tagIdx), 1);
         renderTags();
       });
     });
-    setupGenericTags(inputId, containerId, array);
   }
+
+  function bindInput() {
+    const input = aqs(`#${inputId}`);
+    if (!input) return;
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = input.value.trim();
+        if (val && !array.includes(val)) {
+          array.push(val);
+          renderTags();
+          const freshInput = aqs(`#${inputId}`);
+          if (freshInput) freshInput.focus(); // ফোকাস বজায় রাখো
+        }
+        input.value = '';
+      }
+    });
+  }
+
+  renderTags();
+  bindInput();
 }
 
 /* ─── SPECS ─── */
@@ -264,7 +300,21 @@ async function saveProduct() {
     });
 
     const oldPrice = parseInt(aqs('#p-old-price').value) || 0;
-    const discount = parseInt(aqs('#p-discount').value) || (oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0);
+
+    // ✅ FIX: "0" আর "ফাঁকা" আলাদা করে চেক করা হচ্ছে।
+    // আগে parseInt("0") || autoCalc — এতে explicit 0 ইগনোর হয়ে যেত।
+    const discountRaw = aqs('#p-discount').value.trim();
+    const discount = discountRaw !== ''
+      ? (parseInt(discountRaw) || 0)
+      : (oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0);
+
+    let finalStatus = aqs('#p-status').value;
+
+    // ✅ FIX: স্টক ০ হলে এবং status "published" থাকলে auto "outofstock" করো
+    // (edit-product.js-এ এই লজিক আগে থেকেই ছিল, এখানে যোগ করা হলো)
+    if (stock <= 0 && finalStatus === 'published') {
+      finalStatus = 'outofstock';
+    }
 
     const productData = {
       name, slug, productCode,
@@ -281,7 +331,7 @@ async function saveProduct() {
       tags,
       whatsappOrderEnabled: aqs('#p-whatsapp').checked,
       telegramOrderEnabled: aqs('#p-telegram').checked,
-      status: aqs('#p-status').value,
+      status: finalStatus,
       averageRating: 0, reviewCount: 0, totalSold: 0,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -304,4 +354,4 @@ async function saveProduct() {
     adminShowToast('সেভ ব্যর্থ: ' + err.message, 'error');
     setBtnLoading(btn, false, '🚀 পাবলিশ করুন');
   }
-               }
+}
