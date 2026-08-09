@@ -1,12 +1,23 @@
 /* ============================================================
    R BD SHOP — Edit Product (ImgBB Version)
    Path: admin/js/edit-product.js
+
+   ✅ FIXED (৩টি বাগ):
+   1. loadCategories()-এ where('status','==','active') + orderBy('name')
+      কম্বিনেশন Firestore composite index চাইতো — index না থাকলে
+      console-এ error আসতো এবং dropdown খালি থাকতো। এখন add-product.js-
+      এর মতোই সব ক্যাটাগরি লোড করে client-side filter করা হয় (কোনো
+      index লাগবে না), এবং status-field-বিহীন পুরনো ক্যাটাগরিও দেখাবে।
+   2. Tag/Feature ইনপুটে Enter চাপার পর ফোকাস হারাতো — এখন input
+      element ধ্বংস না করে fix করা হয়েছে।
+   3. Discount ফিল্ডে "0" লিখলেও auto-calculate হয়ে যেত — এখন ফাঁকা
+      vs "0" আলাদা করে চেক হয়।
    ============================================================ */
 
 import { db, uploadToImgBB } from './firebase-config.js';
 import {
   doc, getDoc, updateDoc, getDocs, collection,
-  query, where, orderBy, serverTimestamp
+  query, orderBy, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 import { requireAdmin, adminLogout } from './admin-auth.js';
@@ -45,19 +56,29 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+/* ✅ FIX: আগে where('status','==','active') + orderBy('name') ব্যবহার
+   হতো, যেটায় Firestore composite index লাগে (না থাকলে silent fail)।
+   এখন add-product.js-এর প্যাটার্ন অনুসরণ করে সব ক্যাটাগরি এনে
+   client-side filter করা হচ্ছে — status-field-বিহীন পুরনো ক্যাটাগরিও
+   এখন ঠিকঠাক দেখাবে, কোনো index দরকার নেই। */
 async function loadCategories() {
   const select = aqs('#p-category');
   if (!select) return;
   try {
-    const snap = await getDocs(query(collection(db, 'categories'), where('status', '==', 'active'), orderBy('name')));
+    const snap = await getDocs(query(collection(db, 'categories'), orderBy('name')));
     snap.forEach((d) => {
       const cat = d.data();
-      const opt = document.createElement('option');
-      opt.value = cat.name;
-      opt.textContent = cat.name;
-      select.appendChild(opt);
+      if (!cat.status || cat.status === 'active') {
+        const opt = document.createElement('option');
+        opt.value = cat.name;
+        opt.textContent = cat.name;
+        select.appendChild(opt);
+      }
     });
-  } catch { /* ignore */ }
+  } catch (err) {
+    console.error('[EditProduct] Category load error:', err);
+    adminShowToast('ক্যাটাগরি লোড ব্যর্থ', 'error');
+  }
 }
 
 async function loadProduct() {
@@ -131,33 +152,61 @@ function renderExistingGallery() {
   });
 }
 
+/* ─── TAGS / FEATURES ────────────────────────────────────────
+   ✅ FIX: আগে প্রতিটা tag যোগ হলে container.innerHTML পুরো রিসেট
+   হতো (input সহ), ফলে ফোকাস হারিয়ে যেত। এখন input element কখনো
+   destroy হয় না — শুধু tag span-গুলো replace হয়, input অক্ষত থাকে
+   এবং ফোকাস স্বাভাবিকভাবেই বজায় থাকে।
+──────────────────────────────────────────────────────────── */
 function renderTagsUI(containerId, inputId, array) {
   const container = aqs(`#${containerId}`);
   if (!container) return;
-  const tagsHtml = array.map((t, i) => `
-    <span class="tags-input__tag">${escapeAdminHtml(t)}
-      <button type="button" class="tags-input__tag-remove" data-rm-idx="${i}">✕</button>
-    </span>`).join('');
-  container.innerHTML = tagsHtml + `<input type="text" class="tags-input__input" id="${inputId}" placeholder="Enter চাপুন" />`;
-  container.querySelectorAll('[data-rm-idx]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      array.splice(parseInt(btn.dataset.rmIdx), 1);
-      renderTagsUI(containerId, inputId, array);
+
+  function render() {
+    const input = aqs(`#${inputId}`);
+
+    const tagsHtml = array.map((t, i) => `
+      <span class="tags-input__tag">${escapeAdminHtml(t)}
+        <button type="button" class="tags-input__tag-remove" data-rm-idx="${i}">✕</button>
+      </span>`).join('');
+
+    container.querySelectorAll('.tags-input__tag').forEach((el) => el.remove());
+
+    if (input) {
+      input.insertAdjacentHTML('beforebegin', tagsHtml);
+    } else {
+      container.innerHTML = tagsHtml + `<input type="text" class="tags-input__input" id="${inputId}" placeholder="Enter চাপুন" />`;
+      bindInput();
+    }
+
+    container.querySelectorAll('[data-rm-idx]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        array.splice(parseInt(btn.dataset.rmIdx), 1);
+        render();
+      });
     });
-  });
-  const input = container.querySelector(`#${inputId}`);
-  if (input) {
+  }
+
+  function bindInput() {
+    const input = container.querySelector(`#${inputId}`);
+    if (!input) return;
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         const val = input.value.trim();
         if (val && !array.includes(val)) {
           array.push(val);
-          renderTagsUI(containerId, inputId, array);
+          render();
+          const freshInput = aqs(`#${inputId}`);
+          if (freshInput) freshInput.focus();
         }
+        input.value = '';
       }
     });
   }
+
+  render();
+  bindInput();
 }
 
 function setupImageUpload() {
@@ -252,7 +301,13 @@ async function updateProduct() {
     });
 
     const oldPrice = parseInt(aqs('#p-old-price').value) || 0;
-    const discount = parseInt(aqs('#p-discount').value) || (oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0);
+
+    // ✅ FIX: "0" আর "ফাঁকা" আলাদা করে চেক — explicit 0 আর ইগনোর হবে না
+    const discountRaw = aqs('#p-discount').value.trim();
+    const discount = discountRaw !== ''
+      ? (parseInt(discountRaw) || 0)
+      : (oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0);
+
     const stock = parseInt(aqs('#p-stock').value) || 0;
 
     const updateData = {
@@ -286,4 +341,4 @@ async function updateProduct() {
     adminShowToast('আপডেট ব্যর্থ: ' + err.message, 'error');
     setBtnLoading(btn, false, '💾 আপডেট করুন');
   }
-}
+                     }
