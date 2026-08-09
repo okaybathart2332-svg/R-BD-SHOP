@@ -1,12 +1,19 @@
 /* ============================================================
    R BD SHOP — Inventory Management
    Path: admin/js/inventory.js
+
+   ✅ FIXED: loadHistory()-এ where('productId',...) + orderBy('createdAt',...)
+   কম্বিনেশন Firestore composite index চাইতো — index না বানানো থাকলে
+   "হিস্ট্রি" বাটনে ক্লিক করলে console-এ silent error আসতো এবং কিছুই
+   লোড হতো না। এখন orderBy বাদ দিয়ে সব ম্যাচিং ডকুমেন্ট এনে
+   client-side-এ createdAt অনুযায়ী sort ও limit করা হচ্ছে — কোনো
+   index দরকার নেই।
    ============================================================ */
 
 import { db } from './firebase-config.js';
 import {
   collection, query, orderBy, getDocs, doc, updateDoc,
-  addDoc, serverTimestamp, where, limit
+  addDoc, serverTimestamp, where
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 import { requireAdmin, adminLogout, getCurrentAdmin } from './admin-auth.js';
@@ -153,8 +160,10 @@ async function loadHistory(productId, productName) {
   if (listEl) listEl.innerHTML = '<div class="a-flex-center" style="padding:var(--a-space-6)"><div class="a-spinner"></div></div>';
 
   try {
+    // ✅ FIX: orderBy বাদ দেওয়া হয়েছে যাতে composite index না লাগে।
+    // productId দিয়ে শুধু equality filter, বাকি sort ও limit client-side।
     const snap = await getDocs(
-      query(collection(db, 'inventoryHistory'), where('productId', '==', productId), orderBy('createdAt', 'desc'), limit(20))
+      query(collection(db, 'inventoryHistory'), where('productId', '==', productId))
     );
 
     if (snap.empty) {
@@ -162,9 +171,17 @@ async function loadHistory(productId, productName) {
       return;
     }
 
+    let historyItems = [];
+    snap.forEach((d) => historyItems.push({ id: d.id, ...d.data() }));
+
+    // Client-side sort: নতুন আগে
+    historyItems.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+    // সর্বোচ্চ ২০টা দেখাও
+    historyItems = historyItems.slice(0, 20);
+
     listEl.innerHTML = '';
-    snap.forEach((d) => {
-      const h = d.data();
+    historyItems.forEach((h) => {
       const isPlus = h.change > 0;
       listEl.innerHTML += `
         <div class="stock-history-item">
@@ -177,7 +194,8 @@ async function loadHistory(productId, productName) {
     // Scroll to history
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  } catch {
+  } catch (err) {
+    console.error('[Inventory] History load error:', err);
     listEl.innerHTML = '<p class="a-text-muted a-text-sm a-text-center">হিস্ট্রি লোড ব্যর্থ</p>';
   }
 }
@@ -194,4 +212,4 @@ function setupSearch() {
     renderTable();
   }, 300);
   input.addEventListener('input', (e) => d(e.target.value.trim()));
-                              }
+       }
