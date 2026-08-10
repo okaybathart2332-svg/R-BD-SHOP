@@ -4,17 +4,20 @@
    Description: Loads all products from Firestore, renders
                 table, search, filter by status, pagination,
                 delete, publish/unpublish, duplicate actions.
+
+   ✅ FIXED: handleDelete()-এ Firebase Storage থেকে ছবি মুছার চেষ্টা
+   করা হতো (ref()/deleteObject()), কিন্তু পণ্যের ছবি আসলে ImgBB-তে
+   হোস্ট করা (external URL, Firebase Storage-এ না) — তাই এই কোড
+   কখনো কাজ করতো না, try/catch-এ silently fail হতো। এখন সেই মৃত
+   কোড সরিয়ে একটা স্পষ্ট নোট রাখা হয়েছে।
    ============================================================ */
 
-import { db, storage } from './firebase-config.js';
+import { db } from './firebase-config.js';
 import {
   collection, query, orderBy, getDocs,
   doc, deleteDoc, updateDoc, addDoc,
   Timestamp, serverTimestamp
 }                      from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import {
-  ref, deleteObject
-}                      from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
 import { requireAdmin, adminLogout } from './admin-auth.js';
 import {
@@ -343,19 +346,14 @@ async function handleDelete(product) {
   try {
     await deleteDoc(doc(db, 'products', product.id));
 
-    // Try to delete images from storage (best effort)
-    try {
-      if (product.mainImage) {
-        const imgRef = ref(storage, product.mainImage);
-        await deleteObject(imgRef).catch(() => {});
-      }
-      if (product.galleryImages?.length) {
-        for (const url of product.galleryImages) {
-          const gRef = ref(storage, url);
-          await deleteObject(gRef).catch(() => {});
-        }
-      }
-    } catch { /* ignore storage errors */ }
+    // ✅ FIX: আগে এখানে Firebase Storage-এর ref()/deleteObject() দিয়ে
+    // ছবি মুছার চেষ্টা করা হতো — কিন্তু এই প্রজেক্টে পণ্যের ছবি ImgBB-তে
+    // (external hosting) আপলোড হয়, Firebase Storage-এ না। তাই সেই কোড
+    // কখনো কাজ করতো না এবং silently fail হতো। ImgBB-এর পাবলিক API দিয়ে
+    // ছবি ডিলিট করা যায় না (delete করতে হলে ImgBB delete URL সংরক্ষণ
+    // করে রাখতে হবে upload-এর সময়, যেটা বর্তমানে করা হয় না)।
+    // তাই এখানে শুধু Firestore ডকুমেন্ট মোছা হচ্ছে — ছবি ImgBB-তেই থেকে
+    // যাবে, এটাই expected behavior এই মুহূর্তে।
 
     // Remove from local array
     allProducts = allProducts.filter((p) => p.id !== product.id);
@@ -424,4 +422,4 @@ async function handleDuplicate(product) {
     console.error('[ProductList] Duplicate error:', err);
     adminShowToast('ডুপ্লিকেট করতে সমস্যা হয়েছে', 'error');
   }
-  }
+   }
