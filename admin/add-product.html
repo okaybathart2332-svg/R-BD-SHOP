@@ -1,6 +1,9 @@
 <!-- ============================================================
    R BD SHOP — Add Product Page
    Path: admin/add-product.html
+
+   ✅ FIXED: স্ট্যাটাস dropdown-এ "স্টক শেষ (outofstock)" অপশন ছিল না,
+   যদিও edit-product.html-এ ছিল — এখন দুই পেজেই একই অপশন সেট আছে।
    ============================================================ -->
 <!DOCTYPE html>
 <html lang="bn" dir="ltr">
@@ -143,6 +146,7 @@
                       <option value="draft">ড্রাফট</option>
                       <option value="published">পাবলিশড</option>
                       <option value="hidden">লুকানো</option>
+                      <option value="outofstock">স্টক শেষ</option>
                     </select>
                   </div>
                   <div class="a-form-group">
@@ -235,4 +239,4 @@
   <div id="admin-toast-container"></div>
   <script type="module" src="js/add-product.js"></script>
 </body>
-                                              </html>
+             </html>
