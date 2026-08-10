@@ -3,6 +3,23 @@
    Path: frontend/css/product.css
    Description: Image gallery, product info, tabs, order CTAs,
                 specifications, reviews, related products
+
+   ✅ FIXED (স্ক্রিনশটে দেখানো বাগ): .product-detail__gallery-এ
+   position: sticky সব স্ক্রিন সাইজে বসানো ছিল। ডেস্কটপে এটা ঠিক
+   (বাম পাশে ছবি আটকে থাকে, ডান পাশের তথ্য স্ক্রল হয়) — কিন্তু
+   মোবাইলে layout column আকারে সাজে (flex-direction: column,
+   responsive.css দ্রষ্টব্য), তখন sticky positioning ভুল আচরণ করে:
+   ছবিটা স্ক্রিনে "আটকে" থাকে আর নিচের লেখা তার উপর দিয়ে স্ক্রল হয়ে
+   যায় — ঠিক যেভাবে স্ক্রিনশটে দেখা গেছে।
+
+   এখন মোবাইলে (max-width:767px):
+   - position: static করা হয়েছে, তাই ছবি আর আটকে থাকবে না
+   - গ্যালারির উচ্চতা কমপ্যাক্ট করা হয়েছে (max-height সীমিত) যাতে
+     ছবি পুরো স্ক্রিন জুড়ে না থাকে, শুধু পণ্যের ছবি + নাম + সংক্ষিপ্ত
+     তথ্য একসাথে দেখা যায়
+   - থাম্বনেইলও ছোট করা হয়েছে
+   (পূর্ণ ছবি দেখতে ট্যাপ করলে আগে থেকেই থাকা zoom modal খুলবে —
+   product-detail.js-এর openZoom() ফাংশন, কোনো পরিবর্তন লাগেনি)
    ============================================================ */
 
 /* ══════════════════════════════════════════════════════════════
@@ -633,4 +650,36 @@
   font-size: var(--font-size-sm);
   color: var(--txt-muted);
   margin: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ✅ NEW: MOBILE FIX — গ্যালারি sticky bug + কমপ্যাক্ট সাইজ
+   এটাই স্ক্রিনশটে দেখানো "ছবি আটকে থাকা, লেখা উপর দিয়ে চলে যাওয়া"
+   বাগের মূল সমাধান। responsive.css-এও এই সাথে মেলে এমন rule আছে।
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .product-detail__gallery {
+    position: static;   /* sticky বাতিল — এটাই মূল ফিক্স */
+    width: 100%;
   }
+
+  .gallery__main {
+    aspect-ratio: 4 / 3;   /* বর্গাকার না রেখে কমপ্যাক্ট করা হলো */
+    max-height: 260px;
+    margin-bottom: var(--space-2);
+  }
+
+  .gallery__main-img {
+    padding: var(--space-2);
+  }
+
+  .gallery__thumb {
+    width: 52px;
+    height: 52px;
+  }
+
+  .gallery__thumbs {
+    gap: var(--space-2);
+    padding-bottom: var(--space-1);
+  }
+   }
