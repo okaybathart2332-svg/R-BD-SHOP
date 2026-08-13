@@ -5,6 +5,15 @@
                 categories, handles search input, filters,
                 sort, pagination. Works for both search
                 results and "all products" browsing.
+
+   ✅ FIXED: initViewToggle()-এ আগে grid.style.gridTemplateColumns
+   সরাসরি inline style দিয়ে সেট করা হতো ('1fr')। এতে দুটো সমস্যা:
+   ১) search.css-এ .list-view ক্লাসের কোনো real style ছিল না (যেটা
+      এখন যোগ করা হয়েছে), ২) inline style CSS-এর সব responsive
+      মিডিয়া কোয়েরির চেয়ে বেশি priority পেত, তাই স্ক্রিন সাইজ
+      বদলালেও grid ঠিকভাবে respond করতো না। এখন শুধু .list-view
+      ক্লাস টগল করা হয়, বাকি স্টাইলিং CSS-এ (search.css) — এতে
+      রেসপন্সিভনেস ঠিক থাকে।
    ============================================================ */
 
 import { db }          from './firebase-config.js';
@@ -333,14 +342,20 @@ function initViewToggle() {
   gridBtn.addEventListener('click', () => {
     gridBtn.classList.add('active');
     listBtn.classList.remove('active');
-    grid.style.gridTemplateColumns = '';
+    // ✅ FIX: আগে grid.style.gridTemplateColumns = '' দিয়ে inline
+    // style ম্যানুয়ালি রিসেট করতে হতো। এখন শুধু ক্লাস সরালেই
+    // search.css-এর base .products-grid রুল আবার প্রযোজ্য হয়।
     grid.classList.remove('list-view');
   });
 
   listBtn.addEventListener('click', () => {
     listBtn.classList.add('active');
     gridBtn.classList.remove('active');
-    grid.style.gridTemplateColumns = '1fr';
+    // ✅ FIX: আগে grid.style.gridTemplateColumns = '1fr' inline style
+    // বসানো হতো, যা সব CSS মিডিয়া কোয়েরির চেয়ে বেশি priority পেত
+    // এবং কোনো real list layout ছিল না। এখন শুধু .list-view ক্লাস
+    // যোগ হয়, বাকি স্টাইলিং (real horizontal list layout, responsive
+    // সহ) search.css-এ ডিফাইন করা আছে।
     grid.classList.add('list-view');
   });
 }
@@ -359,4 +374,4 @@ function updateFooter() {
     const el = document.getElementById('footer-tg');
     if (el) el.href = tgUrl;
   }
-}
+     }
