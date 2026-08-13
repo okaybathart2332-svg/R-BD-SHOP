@@ -3,6 +3,12 @@
    Path: frontend/js/utils.js
    Description: Reusable helpers used across the entire
                 customer website. Import what you need.
+
+   ✅ FIXED: renderProductCard()-এ "অর্ডার করুন" বাটন লিংক করতো
+   `${productUrl}#order`-এ, কিন্তু product.html-এ সেই id নেই
+   (আছে id="order-section")। তাই ক্লিক করলে প্রোডাক্ট পেজে যেত ঠিকই,
+   কিন্তু অর্ডার সেকশনে অটো-স্ক্রল হতো না। এখন সঠিক id ব্যবহার
+   করা হয়েছে।
    ============================================================ */
 
 /* ══════════════════════════════════════════════════════════════
@@ -865,7 +871,7 @@ export function renderProductCard(product) {
             বিস্তারিত
           </a>
           ${!isOutOfStock
-            ? `<a href="${productUrl}#order"
+            ? `<a href="${productUrl}#order-section"
                   class="btn btn--primary btn--sm"
                   style="flex:1">
                 অর্ডার করুন
