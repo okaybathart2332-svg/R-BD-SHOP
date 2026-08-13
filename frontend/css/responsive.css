@@ -3,6 +3,15 @@
    Path: frontend/css/responsive.css
    Description: All breakpoints for mobile, tablet, laptop,
                 desktop. Mobile-first approach.
+
+   ✅ FIXED: PRODUCT PAGE SPECIFIC RESPONSIVE সেকশনে
+   .product-detail__gallery-এর জন্য position: static যোগ করা
+   হয়েছে। এটাই স্ক্রিনশটে দেখানো বাগের (ছবি আটকে থাকা, লেখা তার
+   ওপর দিয়ে স্ক্রল হওয়া) মূল কারণ ছিল — product.css-এ position: sticky
+   বসানো ছিল যা মোবাইলে কখনো override হতো না। product.css-এও এই
+   ফিক্স যোগ করা হয়েছে, এখানে responsive.css-এও explicit ভাবে রাখা
+   হলো যাতে ভবিষ্যতে কেউ product.css-এর মিডিয়া কোয়েরি সরালেও এই
+   ফাইলটা fallback হিসেবে কাজ করে।
    ============================================================ */
 
 /* ══════════════════════════════════════════════════════════════
@@ -554,6 +563,10 @@
 
   .product-detail__gallery {
     width: 100%;
+    /* ✅ FIX: sticky-এর কারণে ছবি স্ক্রিনে আটকে থাকতো আর লেখা তার
+       উপর দিয়ে স্ক্রল হয়ে যেত (স্ক্রিনশটে দেখানো বাগ)। static করাতে
+       এখন ছবিও স্বাভাবিক ফ্লো-তে বাকি কন্টেন্টের সাথে স্ক্রল হবে। */
+    position: static;
   }
 
   .product-detail__info {
@@ -607,4 +620,4 @@
   .admin-stats-grid {
     grid-template-columns: 1fr;
   }
-      }
+     }
