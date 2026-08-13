@@ -3,7 +3,71 @@
    Path: frontend/css/search.css
    Description: Search results page, category browse page,
                 filters sidebar, sort controls, pagination
+
+   ✅ FIXED (২টি বাগ, একটা প্রত্যাশার চেয়ে বড়):
+
+   1. বড় বাগ (নতুন পাওয়া): search.html ও category.html —
+      এই দুই পেজ home.css লোড করে না (শুধু search.css লোড করে),
+      অথচ .products-grid ক্লাসের display:grid + grid-template-columns
+      রুল শুধু home.css-এ ডিফাইন করা ছিল! ফলে search.html ও
+      category.html-এ পণ্যের গ্রিড লেআউট আসলে কোনো grid definition-ই
+      পাচ্ছিল না ডিফল্ট/ডেস্কটপ স্ক্রিনে (শুধু responsive.css-এর
+      মিডিয়া কোয়েরিতে column সংখ্যা বলা ছিল, কিন্তু display:grid
+      কোথাও সেট ছিল না)। এখন এই ফাইলে base .products-grid রুল
+      যোগ করা হয়েছে।
+
+   2. "লিস্ট ভিউ" বাটনে ক্লিক করলে .list-view ক্লাস যোগ হতো কিন্তু
+      কোনো CSS স্টাইল ছিল না — শুধু ১-কলাম গ্রিড হতো, প্রকৃত
+      horizontal list layout হতো না। এখন আসল লিস্ট লেআউট যোগ
+      করা হয়েছে (ছবি বামে, তথ্য ডানে)।
    ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════
+   ✅ NEW: PRODUCTS GRID BASE (আগে এই ফাইলে ছিলই না)
+══════════════════════════════════════════════════════════════ */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-5);
+}
+
+/* ✅ NEW: প্রকৃত লিস্ট ভিউ লেআউট — ছবি বামে, তথ্য ডানে */
+.products-grid.list-view {
+  grid-template-columns: 1fr;
+}
+
+.products-grid.list-view .product-card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.products-grid.list-view .product-card__image-wrap {
+  width: 220px;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+}
+
+.products-grid.list-view .product-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.products-grid.list-view .product-card__actions {
+  max-width: 320px;
+}
+
+@media (max-width: 767px) {
+  .products-grid.list-view .product-card {
+    flex-direction: column;
+  }
+  .products-grid.list-view .product-card__image-wrap {
+    width: 100%;
+  }
+}
 
 /* ══════════════════════════════════════════════════════════════
    SEARCH PAGE LAYOUT
@@ -603,4 +667,17 @@
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-3);
   }
+
+  /* মোবাইলে products-grid কমপ্যাক্ট */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
   }
+}
+
+@media (max-width: 479px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+}
