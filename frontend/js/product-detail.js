@@ -4,11 +4,24 @@
    Description: Loads single product from Firestore by slug,
                 renders gallery, info, tabs, order links,
                 reviews, related products, SEO tags.
+
+   ✅ FIXED (৩টি বাগ):
+   1. mobile-btn-order বাটনে প্রতিবার quantity +/− চাপলে
+      updateOrderLinks() কল হতো, আর সেখানে প্রতিবার নতুন click
+      listener যোগ হতো পুরনোটা না সরিয়ে — কয়েকবার quantity বদলালে
+      একই ক্লিকে বাটন একাধিকবার react করতো (একাধিক toast দেখাতো)।
+      এখন click listener একবারই বাঁধা হয় (initOrderButtons()-এ),
+      updateOrderLinks() শুধু href আপডেট করে।
+   2. loadProductReviews() query composite index চাইতো
+      (where + where + orderBy) — index না থাকলে রিভিউ লোড হতো না।
+      এখন orderBy বাদ দিয়ে client-side sort করা হচ্ছে।
+   3. loadRelatedProducts() query একই কারণে composite index চাইতো —
+      এখানেও orderBy বাদ দিয়ে client-side sort করা হচ্ছে।
    ============================================================ */
 
 import { db }          from './firebase-config.js';
 import {
-  collection, query, where, orderBy,
+  collection, query, where,
   limit, getDocs, doc, getDoc
 }                      from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
@@ -386,17 +399,27 @@ function initOrderButtons() {
       else showToast('WhatsApp নম্বর কনফিগার করা হয়নি', 'warning');
     });
   }
+
+  // ✅ FIX: mobile order বাটনের click listener এখন এখানে একবারই
+  // বাঁধা হয় (আগে updateOrderLinks()-এর ভেতরে ছিল, যেটা quantity
+  // বদলালে বারবার কল হতো এবং প্রতিবার নতুন listener যোগ হতো —
+  // ফলে কয়েকবার +/- চাপার পর এক ক্লিকে একাধিক toast/action ফায়ার
+  // হতো)। এখন click হ্যান্ডলার click-এর সময় সবসময় সদ্যতম লিংক
+  // নিজে থেকে বের করে নেয়, তাই stale href নিয়েও সমস্যা হয় না।
+  const mOrderBtn = document.getElementById('mobile-btn-order');
+  if (mOrderBtn) {
+    mOrderBtn.addEventListener('click', (e) => {
+      const waLink = getWhatsAppLink();
+      if (!waLink) {
+        e.preventDefault();
+        showToast('WhatsApp নম্বর কনফিগার করা হয়নি', 'warning');
+      }
+    });
+  }
 }
 
 function updateOrderLinks() {
   if (!product) return;
-
-  const productData = {
-    name:        product.name,
-    productCode: product.productCode || product.id,
-    price:       product.price,
-    quantity:     quantity,
-  };
 
   // WhatsApp
   const waLink = getWhatsAppLink();
@@ -412,16 +435,10 @@ function updateOrderLinks() {
   if (tgBtn)  tgBtn.href  = tgLink || '#';
   if (mTgBtn) mTgBtn.href = tgLink || '#';
 
-  // Mobile order button
+  // Mobile order button — শুধু href আপডেট করে, listener এখানে বাঁধা হয় না
   const mOrderBtn = document.getElementById('mobile-btn-order');
   if (mOrderBtn) {
     mOrderBtn.href = waLink || '#';
-    mOrderBtn.addEventListener('click', (e) => {
-      if (!waLink) {
-        e.preventDefault();
-        showToast('WhatsApp নম্বর কনফিগার করা হয়নি', 'warning');
-      }
-    });
   }
 
   // Hide buttons if not enabled
@@ -544,12 +561,14 @@ async function loadProductReviews() {
   if (!listEl) return;
 
   try {
+    // ✅ FIX: orderBy বাদ দেওয়া হয়েছে — where + where + orderBy
+    // কম্বিনেশন composite index চাইতো, index না থাকলে রিভিউ লোডই
+    // হতো না। এখন client-side sort করা হচ্ছে।
     const revQuery = query(
       collection(db, 'reviews'),
       where('productId', '==', product.id),
       where('status', '==', 'approved'),
-      orderBy('createdAt', 'desc'),
-      limit(20)
+      limit(50)
     );
 
     const snapshot = await getDocs(revQuery);
@@ -560,11 +579,17 @@ async function loadProductReviews() {
       return;
     }
 
-    if (countEl) countEl.textContent = `(${snapshot.size})`;
+    let reviews = [];
+    snapshot.forEach((docSnap) => reviews.push({ id: docSnap.id, ...docSnap.data() }));
+
+    // Client-side sort: নতুন আগে
+    reviews.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    reviews = reviews.slice(0, 20);
+
+    if (countEl) countEl.textContent = `(${reviews.length})`;
 
     let html = '';
-    snapshot.forEach((docSnap) => {
-      const rev     = docSnap.data();
+    reviews.forEach((rev) => {
       const initial = (rev.customerName || 'U').charAt(0).toUpperCase();
 
       html += `
@@ -601,17 +626,19 @@ async function loadRelatedProducts() {
   grid.innerHTML = renderProductSkeletons(4);
 
   try {
+    // ✅ FIX: orderBy বাদ দেওয়া হয়েছে — where + where + orderBy
+    // কম্বিনেশন composite index চাইতো। এখন client-side sort করা হচ্ছে,
+    // এবং নিজেকে বাদ দিতে হবে বলে limit একটু বাড়ানো হয়েছে (8 → পরে 4টা)।
     const relQuery = query(
       collection(db, 'products'),
       where('status', '==', 'published'),
       where('categoryName', '==', product.categoryName || '__none__'),
-      orderBy('createdAt', 'desc'),
-      limit(5)
+      limit(8)
     );
 
     const snapshot = await getDocs(relQuery);
 
-    const related = [];
+    let related = [];
     snapshot.forEach((docSnap) => {
       if (docSnap.id !== product.id) {
         related.push({ id: docSnap.id, ...docSnap.data() });
@@ -623,6 +650,9 @@ async function loadRelatedProducts() {
       if (section) section.style.display = 'none';
       return;
     }
+
+    // Client-side sort: নতুন আগে
+    related.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
     grid.innerHTML = related.slice(0, 4).map((p) => renderProductCard(p)).join('');
     initLazyLoad();
@@ -759,4 +789,4 @@ function updateFooter() {
     const el = document.getElementById('footer-tg');
     if (el) el.href = tgUrl;
   }
-}
+   }
